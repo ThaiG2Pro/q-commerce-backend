@@ -11,7 +11,6 @@ const config = defineConfig({
     redisUrl: process.env.REDIS_URL,
     databaseDriverOptions: isProduction ? {
       connection: {
-        connectionTimeoutMillis: 60000,
         ssl: {
           rejectUnauthorized: false,
         },
@@ -19,13 +18,9 @@ const config = defineConfig({
       pool: {
         min: 2,
         max: 10,
-        acquireTimeoutMillis: 60000,
-        idleTimeoutMillis: 30000,
       },
     } : {},
     http: {
-      host: process.env.HOST || "0.0.0.0",
-      port: parseInt(process.env.PORT || "9000"),
       storeCors: process.env.STORE_CORS || "",
       adminCors: process.env.ADMIN_CORS || "",
       authCors: process.env.AUTH_CORS || "",

@@ -1,0 +1,23 @@
+{
+"inputs": [
+  // The "inputs" section defines the inputs required for the MCP server configuration.
+  {
+    "type": "promptString"
+  }
+],
+"servers": {
+  // The "servers" section defines the MCP servers you want to use.
+  "render": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://mcp.render.com/mcp",
+        "--header",
+        "Authorization: Bearer ${RENDER_API_KEY}"
+      ],
+      "env": {
+        "RENDER_API_KEY": "<YOUR_API_KEY>"
+      }
+    }
+ }
+}

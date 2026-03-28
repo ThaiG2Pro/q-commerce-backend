@@ -40,6 +40,5 @@ COPY --from=builder /app /app
 
 EXPOSE 9000
 
-# Khởi chạy: Chạy migrate DB trước, sau đó start server
-# Set explicit port from environment or default to 9000
-CMD ["sh", "-c", "pnpm exec medusa db:migrate && PORT=${PORT:-9000} pnpm exec medusa start"]
+# Khởi chạy: set HOST and PORT env vars, run migrations, then start
+CMD ["sh", "-c", "export HOST=${HOST:-0.0.0.0} && export PORT=${PORT:-9000} && pnpm exec medusa db:migrate && pnpm exec medusa start"]
