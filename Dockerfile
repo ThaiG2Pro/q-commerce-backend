@@ -41,4 +41,4 @@ EXPOSE 9000
 
 # Khởi chạy: Chạy migrate DB trước, sau đó start server
 # Tăng cường khả năng kết nối DB bằng cách đảm bảo cấu hình chính xác
-CMD ["sh", "-c", "pnpm exec medusa db:migrate && pnpm run start"]
+CMD ["sh", "-c", "pnpm exec medusa db:migrate && pnpm exec medusa start"]

@@ -10,15 +10,9 @@ const config = defineConfig({
     databaseUrl: process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,
     databaseDriverOptions: isProduction ? {
-      connectionTimeoutMillis: 30000, // Tăng lên 30s cho Neon cold start
-      idle_in_transaction_session_timeout: 30000, // Tránh treo transaction
+      connectionTimeoutMillis: 60000, // Tăng lên 60s cho Neon cold start
       ssl: {
-        rejectUnauthorized: false, // Bỏ qua cert validation cho Render/Neon
-      },
-      connection: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
+        rejectUnauthorized: false, // Cần thiết cho Render kết nối Neon
       },
     } : {},
     http: {
