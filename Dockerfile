@@ -14,6 +14,7 @@ COPY package.json pnpm-lock.yaml ./
 
 # Cài đặt dependency
 RUN pnpm install --frozen-lockfile
+RUN pnpm approve-builds
 
 # Copy toàn bộ code vào
 COPY . .
