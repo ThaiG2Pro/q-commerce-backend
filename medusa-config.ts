@@ -6,32 +6,23 @@ const isProduction = process.env.NODE_ENV === "production"
 
 const config = defineConfig({
   projectConfig: {
-    // Để cho driver tự xử lý URL đầy đủ (bao gồm sslmode=require từ Neon)
     databaseUrl: process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,
-    databaseDriverOptions: isProduction ? {
+    // Sửa lỗi ở đây: Luôn bật SSL cho Neon, bất kể dev hay prod
+    databaseDriverOptions: {
       connection: {
-        connectionTimeoutMillis: 60000,
         ssl: {
           rejectUnauthorized: false,
         },
       },
-      pool: {
-        min: 2,
-        max: 10,
-        acquireTimeoutMillis: 60000,
-        idleTimeoutMillis: 30000,
-      },
-    } : {},
+    },
     http: {
-      host: process.env.HOST || "0.0.0.0",
-      port: parseInt(process.env.PORT || "9000"),
       storeCors: process.env.STORE_CORS || "",
       adminCors: process.env.ADMIN_CORS || "",
       authCors: process.env.AUTH_CORS || "",
       jwtSecret: process.env.JWT_SECRET || "supersecret",
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
-    }
+    },
   },
   modules: process.env.REDIS_URL ? {
     [Modules.EVENT_BUS]: {
