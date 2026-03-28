@@ -27,6 +27,7 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 ENV NODE_ENV=production
+ENV HOST=0.0.0.0
 
 # Render yêu cầu thư viện hệ thống cho xử lý ảnh
 RUN apk add --no-cache vips-dev
@@ -40,5 +41,5 @@ COPY --from=builder /app /app
 EXPOSE 9000
 
 # Khởi chạy: Chạy migrate DB trước, sau đó start server
-# Tăng cường khả năng kết nối DB bằng cách đảm bảo cấu hình chính xác
-CMD ["sh", "-c", "pnpm exec medusa db:migrate && pnpm exec medusa start"]
+# Set explicit port from environment or default to 9000
+CMD ["sh", "-c", "pnpm exec medusa db:migrate && PORT=${PORT:-9000} pnpm exec medusa start"]

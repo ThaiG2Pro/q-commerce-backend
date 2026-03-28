@@ -10,12 +10,22 @@ const config = defineConfig({
     databaseUrl: process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,
     databaseDriverOptions: isProduction ? {
-      connectionTimeoutMillis: 60000, // Tăng lên 60s cho Neon cold start
-      ssl: {
-        rejectUnauthorized: false, // Cần thiết cho Render kết nối Neon
+      connection: {
+        connectionTimeoutMillis: 60000,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
+      pool: {
+        min: 2,
+        max: 10,
+        acquireTimeoutMillis: 60000,
+        idleTimeoutMillis: 30000,
       },
     } : {},
     http: {
+      host: process.env.HOST || "0.0.0.0",
+      port: parseInt(process.env.PORT || "9000"),
       storeCors: process.env.STORE_CORS || "",
       adminCors: process.env.ADMIN_CORS || "",
       authCors: process.env.AUTH_CORS || "",
