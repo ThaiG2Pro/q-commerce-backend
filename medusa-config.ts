@@ -16,8 +16,11 @@ const config = defineConfig({
         },
       },
       pool: {
-        min: 2,
-        max: 10,
+        min: 0,
+        max: 7,
+        acquireTimeoutMillis: 300000,
+        createTimeoutMillis: 300000,
+        idleTimeoutMillis: 30000,
       },
     } : {},
     http: {

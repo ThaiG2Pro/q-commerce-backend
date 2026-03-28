@@ -16,7 +16,7 @@
         "Authorization: Bearer ${RENDER_API_KEY}"
       ],
       "env": {
-        "RENDER_API_KEY": "<YOUR_API_KEY>"
+        "RENDER_API_KEY": "rnd_hfxSXQCKCcz6XrvBgdX219aBrEZ5"
       }
     }
  }

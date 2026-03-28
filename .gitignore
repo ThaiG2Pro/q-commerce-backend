@@ -24,3 +24,8 @@ build
 !.yarn/versions
 
 .medusa
+
+.vscode
+.windsurf
+.agents
+.vscode/mcp.json

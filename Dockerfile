@@ -38,7 +38,11 @@ RUN corepack enable pnpm && corepack prepare pnpm@10.30.3 --activate
 # Chỉ copy những thứ cần thiết từ builder để giữ image nhẹ
 COPY --from=builder /app /app
 
+# Copy startup script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 EXPOSE 9000
 
-# Khởi chạy: set HOST and PORT env vars, run migrations, then start
-CMD ["sh", "-c", "export HOST=${HOST:-0.0.0.0} && export PORT=${PORT:-9000} && pnpm exec medusa db:migrate && pnpm exec medusa start"]
+# Use startup script for better error handling
+CMD ["/app/start.sh"]
