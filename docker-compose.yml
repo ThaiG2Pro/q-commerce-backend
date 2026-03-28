@@ -1,0 +1,24 @@
+services:
+  medusa-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medusa-dev-server
+    ports:
+      - "9000:9000"
+      - "5173:5173"
+    env_file:
+      - .env
+    volumes:
+      # Mount code để Hot-reload hoạt động
+      - .:/app
+      # Đảm bảo không mount node_modules từ máy thật (tránh lỗi OS)
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    # Tự động enable pnpm, cài package, migrate và chạy dev
+    command: >
+      sh -c "corepack enable pnpm &&
+             pnpm install && 
+             pnpm exec medusa db:migrate && 
+             pnpm run dev"
