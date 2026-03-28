@@ -6,11 +6,14 @@ const isProduction = process.env.NODE_ENV === "production"
 
 const config = defineConfig({
   projectConfig: {
-    databaseUrl: process.env.DATABASE_URL ? process.env.DATABASE_URL.split("?")[0] : "postgres://localhost/medusa",
+    // Để cho driver tự xử lý URL đầy đủ (bao gồm sslmode=require từ Neon)
+    databaseUrl: process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,
     databaseDriverOptions: isProduction ? {
+      connectionTimeoutMillis: 30000, // Tăng lên 30s cho Neon cold start
+      idle_in_transaction_session_timeout: 30000, // Tránh treo transaction
       ssl: {
-        rejectUnauthorized: false,
+        rejectUnauthorized: false, // Bỏ qua cert validation cho Render/Neon
       },
       connection: {
         ssl: {
