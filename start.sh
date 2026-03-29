@@ -18,6 +18,15 @@ fi
 
 echo "✓ DATABASE_URL is configured"
 
+# Debug: Check if channel_binding is in DATABASE_URL
+if echo "$DATABASE_URL" | grep -q "channel_binding"; then
+    echo "⚠️  WARNING: DATABASE_URL contains 'channel_binding' parameter"
+    echo "   This may cause connection timeouts with Node.js pg driver"
+    echo "   Removing channel_binding from DATABASE_URL..."
+    export DATABASE_URL=$(echo "$DATABASE_URL" | sed 's/&channel_binding=[^&]*//g' | sed 's/?channel_binding=[^&]*&/?/g' | sed 's/?channel_binding=[^?]*$//g')
+    echo "✓ Cleaned DATABASE_URL (channel_binding removed)"
+fi
+
 # Run migrations with timeout and better error handling
 echo "📦 Running database migrations..."
 if timeout 120 pnpm exec medusa db:migrate; then
