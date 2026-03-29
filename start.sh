@@ -9,6 +9,10 @@ echo "🚀 Starting Medusa application..."
 echo "   HOST: $HOST"
 echo "   PORT: $PORT"
 
+# Clean leading/trailing quotes if they exist (common issue in Render dashboard)
+export DATABASE_URL=$(echo "$DATABASE_URL" | sed 's/^"//;s/"$//')
+export REDIS_URL=$(echo "$REDIS_URL" | sed 's/^"//;s/"$//')
+
 # Check if DATABASE_URL is set
 if [ -z "$DATABASE_URL" ]; then
     echo "❌ ERROR: DATABASE_URL is not set"
