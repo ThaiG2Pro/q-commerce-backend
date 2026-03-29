@@ -36,19 +36,28 @@ const config = defineConfig({
       resolve: "@medusajs/event-bus-redis",
       options: {
         redisUrl: process.env.REDIS_URL,
+        redisOptions: {
+          enableReadyCheck: false,
+        },
       },
     },
     [Modules.CACHE]: {
       resolve: "@medusajs/cache-redis",
       options: {
         redisUrl: process.env.REDIS_URL,
+        redisOptions: {
+          enableReadyCheck: false,
+        },
       },
     },
     [Modules.WORKFLOW_ENGINE]: {
       resolve: "@medusajs/workflow-engine-redis",
       options: {
         redis: {
-          connectionString: process.env.REDIS_URL,
+          redisUrl: process.env.REDIS_URL,
+          redisOptions: {
+            enableReadyCheck: false,
+          },
         },
       },
     },
