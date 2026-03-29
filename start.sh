@@ -33,7 +33,7 @@ fi
 
 # Run migrations with timeout and better error handling
 echo "📦 Running database migrations..."
-if timeout 120 pnpm exec medusa db:migrate; then
+if timeout 300 pnpm exec medusa db:migrate; then
     echo "✓ Migrations completed successfully"
 else
     MIGRATION_EXIT_CODE=$?

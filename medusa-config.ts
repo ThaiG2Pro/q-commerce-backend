@@ -48,7 +48,7 @@ const config = defineConfig({
       resolve: "@medusajs/workflow-engine-redis",
       options: {
         redis: {
-          url: process.env.REDIS_URL,
+          connectionString: process.env.REDIS_URL,
         },
       },
     },
