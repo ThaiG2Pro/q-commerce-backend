@@ -18,8 +18,10 @@ https://dashboard.render.com/web/srv-d73m38lactks738175f0
 
 **DATABASE_URL** (Neon PostgreSQL):
 ```
-postgresql://neondb_owner:npg_TSC9tjz4ZcvE@ep-autumn-heart-a12shr52.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+postgresql://neondb_owner:npg_TSC9tjz4ZcvE@ep-autumn-heart-a12shr52.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
 ```
+
+**Note**: Removed `channel_binding=require` parameter as it causes connection timeouts in production.
 
 **REDIS_URL** (Upstash Redis):
 ```
