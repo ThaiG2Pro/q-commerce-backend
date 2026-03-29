@@ -31,7 +31,7 @@ const config = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
   },
-  modules: process.env.REDIS_URL ? {
+  modules: (process.env.REDIS_URL && !process.env.REDIS_URL.includes('_ro')) ? {
     [Modules.EVENT_BUS]: {
       resolve: "@medusajs/event-bus-redis",
       options: {
@@ -52,7 +52,10 @@ const config = defineConfig({
         },
       },
     },
-  } : {}
+  } : {
+    // Use in-memory modules when Redis is not available or read-only
+    // This allows the app to start even without Redis
+  }
 })
 
 export default config
