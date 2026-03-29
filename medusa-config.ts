@@ -1,4 +1,5 @@
 import { loadEnv, defineConfig, Modules } from '@medusajs/framework/utils'
+import path from "path"
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
@@ -30,6 +31,9 @@ const config = defineConfig({
       jwtSecret: process.env.JWT_SECRET || "supersecret",
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
+  },
+  admin: {
+    disable: isProduction,
   },
   modules: (process.env.REDIS_URL && !process.env.REDIS_URL.includes('_ro')) ? {
     [Modules.EVENT_BUS]: {

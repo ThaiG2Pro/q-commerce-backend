@@ -38,9 +38,8 @@ RUN corepack enable pnpm && corepack prepare pnpm@10.30.3 --activate
 # Chỉ copy những thứ cần thiết từ builder để giữ image nhẹ
 COPY --from=builder /app /app
 
-# Medusa v2 builds are stored in .medusa/server
-# Ensure permissions for the server directory
-RUN mkdir -p /app/.medusa/server && chmod -R 777 /app/.medusa/server
+# Ensure correct permissions for the built directory
+RUN chmod -R 777 /app/.medusa
 
 # Copy startup script
 COPY start.sh /app/start.sh

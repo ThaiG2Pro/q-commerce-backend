@@ -2,7 +2,7 @@ node_modules
 .git
 .env
 dist
-.medusa
+.medusa/cache
 .mise.toml
 .cache
 build
