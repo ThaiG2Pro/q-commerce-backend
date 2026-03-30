@@ -25,9 +25,9 @@ const config = defineConfig({
       },
     } : {},
     http: {
-      storeCors: process.env.STORE_CORS || "",
-      adminCors: process.env.ADMIN_CORS || "",
-      authCors: process.env.AUTH_CORS || "",
+      storeCors: process.env.STORE_CORS ? process.env.STORE_CORS.split(",") : "",
+      adminCors: process.env.ADMIN_CORS ? process.env.ADMIN_CORS.split(",") : "",
+      authCors: process.env.AUTH_CORS ? process.env.AUTH_CORS.split(",") : "",
       jwtSecret: process.env.JWT_SECRET || "supersecret",
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
