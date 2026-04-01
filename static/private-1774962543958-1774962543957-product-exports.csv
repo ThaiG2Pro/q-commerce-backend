@@ -1,0 +1,27 @@
+Product Id,Product Handle,Product Title,Product Subtitle,Product Status,Product External Id,Product Description,Product Is Giftcard,Product Discountable,Product Thumbnail,Product Collection Id,Product Type Id,Product Weight,Product Length,Product Height,Product Width,Product Hs Code,Product Origin Country,Product Mid Code,Product Material,Product Created At,Product Updated At,Product Deleted At,Variant Id,Variant Title,Variant Sku,Variant Barcode,Variant Ean,Variant Upc,Variant Allow Backorder,Variant Manage Inventory,Variant Hs Code,Variant Origin Country,Variant Mid Code,Variant Material,Variant Weight,Variant Length,Variant Height,Variant Width,Variant Metadata,Variant Variant Rank,Variant Thumbnail,Variant Product Id,Variant Created At,Variant Updated At,Variant Deleted At,Variant Price VND,Variant Price Vietnam [VND],Variant Option 1 Name,Variant Option 1 Value
+prod_01KN1NFG3F81GJYV2QT3DD51GH,sua-tuoi-cghl-it-duong-loc4,Sữa tươi CGHL ít đường,Cô Gái Hà Lan,published,,"Tên sản phẩm: Sữa tươi CGHL ít đường
+
+Thương hiệu: Cô Gái Hà Lan (Dutch Lady)
+
+Danh mục: Sữa tươi
+
+Giới thiệu:
+
+- Công thức chuẩn Hà Lan với hàm lượng đường giảm nhẹ.
+
+- Bổ sung canxi, protein và các khoáng chất cần thiết.
+
+- Hương vị thơm béo, dễ uống cho cả người lớn và trẻ em.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/sua-tuoi-cghl-it-duong-loc4.webp,,,180,,,,,,,,Tue Mar 31 2026 17:01:57 GMT+0700 (Indochina Time),Tue Mar 31 2026 17:01:57 GMT+0700 (Indochina Time),,variant_01KN1NFGPEG7BJCCVJZ70E145H,Lốc,CGHL-STID,,,,false,true,,,,,,,,,,0,,prod_01KN1NFG3F81GJYV2QT3DD51GH,Tue Mar 31 2026 17:01:58 GMT+0700 (Indochina Time),Tue Mar 31 2026 17:01:58 GMT+0700 (Indochina Time),,33500,33500,Lốc,180 ml
+prod_01KN1ZZFF27DM8C08HP1TC3J75,mi-handy-hao-hao-tom-chua-cay,Mì Handy Hảo Hảo Tôm Chua Cay,Acecook,published,,"Tên sản phẩm: Mì Handy Hảo Hảo Tôm Chua Cay
+
+Thương hiệu: Acecook
+
+Danh mục: Mì ly
+
+Giới thiệu:
+
+- Thiết kế dạng ly tiện dụng, phù hợp cho người bận rộn.
+
+- Giữ nguyên hương vị tôm chua cay truyền thống của Hảo Hảo.
+
+- Đi kèm rau củ sấy khô phong phú bên trong.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/mi-handy-hao-hao-tom-chua-cay.webp,,,67,,,,,,,,Tue Mar 31 2026 20:05:27 GMT+0700 (Indochina Time),Tue Mar 31 2026 20:05:27 GMT+0700 (Indochina Time),,variant_01KN1ZZFX71S9D3B1HBEX56BG5,Ly,ACE-HDHH-TCC,,,,false,true,,,,,,,,,,0,,prod_01KN1ZZFF27DM8C08HP1TC3J75,Tue Mar 31 2026 20:05:27 GMT+0700 (Indochina Time),Tue Mar 31 2026 20:05:27 GMT+0700 (Indochina Time),,9300,,Ly,67 g
