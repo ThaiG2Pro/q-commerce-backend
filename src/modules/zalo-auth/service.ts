@@ -39,7 +39,7 @@ class ZaloAuthProviderService extends AbstractAuthModuleProvider {
       .digest("hex")
 
     // Gọi Zalo Open API để lấy profile
-    const zaloRes = await fetch("<https://graph.zalo.me/v2.0/me?fields=id,name,picture>", {
+    const zaloRes = await fetch("https://graph.zalo.me/v2.0/me?fields=id,name,picture", {
       headers: {
         access_token: accessToken,
         appsecret_proof: appsecretProof,
