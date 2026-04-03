@@ -1,4 +1,3 @@
-// src/modules/zalo-auth/service.ts
 import { AbstractAuthModuleProvider } from "@medusajs/framework/utils"
 import {
   AuthIdentityProviderService,

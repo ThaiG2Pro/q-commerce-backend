@@ -66,9 +66,6 @@ const config = defineConfig({
         },
       },
     } : {}),
-
-    // 2. Phần AUTH: Nằm TRONG object modules nhưng NGOÀI ngoặc đơn của Redis
-    // Nó sẽ luôn luôn được load bất kể có Redis hay không
     [Modules.AUTH]: {
       resolve: "@medusajs/medusa/auth",
       dependencies: [Modules.CACHE, ContainerRegistrationKeys.LOGGER],
@@ -88,7 +85,7 @@ const config = defineConfig({
         ],
       },
     },
-  } // Kết thúc object modules
+  } 
 })
 
 export default config
