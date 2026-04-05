@@ -85,6 +85,23 @@ const config = defineConfig({
         ],
       },
     },
+    [Modules.PAYMENT]: {
+      resolve: "@medusajs/medusa/payment",
+      options: {
+        providers: [
+          {
+            resolve: "./src/modules/payment", 
+            id: "zalopay",
+            options: {
+              app_id: process.env.ZALOPAY_APP_ID,
+              key1: process.env.ZALOPAY_KEY1,
+              key2: process.env.ZALOPAY_KEY2,
+              is_sandbox: process.env.ZALOPAY_IS_SANDBOX === "true",
+            },
+          },
+        ],
+      },
+    },
   } 
 })
 
