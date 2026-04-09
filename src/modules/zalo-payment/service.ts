@@ -19,6 +19,8 @@ import {
   RetrievePaymentOutput,
   UpdatePaymentInput,
   UpdatePaymentOutput,
+  GetPaymentStatusInput,
+  GetPaymentStatusOutput,
   PaymentSessionStatus,
 } from "@medusajs/framework/types"
 import axios from "axios"
@@ -174,6 +176,23 @@ class ZaloPayPaymentProviderService extends AbstractPaymentProvider<Options> {
   async updatePayment(input: UpdatePaymentInput): Promise<UpdatePaymentOutput> {
     return {
       data: input.data,
+    }
+  }
+
+  async getPaymentStatus(input: GetPaymentStatusInput): Promise<GetPaymentStatusOutput> {
+    const status = (input.data as Record<string, unknown> | undefined)?.status
+
+    switch (status) {
+      case "captured":
+        return { status: "captured", data: input.data }
+      case "authorized":
+        return { status: "authorized", data: input.data }
+      case "canceled":
+        return { status: "canceled", data: input.data }
+      case "refunded":
+        return { status: "canceled", data: input.data }
+      default:
+        return { status: "pending", data: input.data }
     }
   }
 

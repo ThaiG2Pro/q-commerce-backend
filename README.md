@@ -60,3 +60,59 @@ Dự án đã được cấu hình sẵn để deploy lên **Render** thông qua
 
 ---
 *Mọi thắc mắc hãy liên hệ trực tiếp với mình qua chat nhé!*
+
+---
+
+## 💳 Payment & Fulfillment Integration (New!)
+
+Dự án đã được tích hợp đầy đủ các payment và fulfillment providers:
+
+### Payment Providers
+- ✅ **COD (Cash on Delivery)** - Thanh toán khi nhận hàng
+- ✅ **ZaloPay** - Cổng thanh toán Việt Nam
+- 📦 **Stripe** - Thẻ quốc tế (code sẵn sàng, cần setup)
+
+### Fulfillment Provider
+- ✅ **In-house Fulfillment** - Quản lý đội giao hàng nội bộ
+  - Tracking number tự động
+  - 7 trạng thái tracking
+  - Real-time updates
+
+### 📚 Tài Liệu Chi Tiết
+
+Xem thư mục `docs/` để biết thêm chi tiết:
+
+| Tài liệu | Mục đích |
+|----------|----------|
+| [QUICKSTART.md](./docs/QUICKSTART.md) | Hướng dẫn bắt đầu nhanh 5 phút |
+| [BACKEND_INTEGRATION.md](./docs/BACKEND_INTEGRATION.md) | Tích hợp Backend (cho dev) |
+| [CLIENT_INTEGRATION.md](./docs/CLIENT_INTEGRATION.md) | Tích hợp Frontend (cho dev) |
+| [API_REFERENCE.md](./docs/API_REFERENCE.md) | Tài liệu API đầy đủ |
+| [DEPLOYMENT.md](./docs/DEPLOYMENT.md) | Hướng dẫn deploy production |
+| [STRIPE_SETUP.md](./docs/STRIPE_SETUP.md) | Setup Stripe (tùy chọn) |
+
+### 🔄 Luồng Giao Dịch
+
+**COD Flow** (Đơn giản nhất):
+```
+Xem sản phẩm → Giỏ hàng → Chọn COD → Tạo đơn 
+  → Giao hàng → Nhận tiền mặt → Xác nhận thanh toán → Hoàn tất
+```
+
+**Online Payment** (ZaloPay/Stripe):
+```
+Xem sản phẩm → Giỏ hàng → Chọn payment → Redirect
+  → Thanh toán → Webhook → Xác nhận đơn → Giao hàng → Hoàn tất
+```
+
+### 🧪 Test Nhanh
+
+```bash
+# Test server
+curl http://localhost:9000/health
+
+# Test fulfillment tracking
+curl http://localhost:9000/store/orders/order_xxx/fulfillments
+```
+
+**Bắt đầu với** `docs/QUICKSTART.md` để biết cách sử dụng! 🚀

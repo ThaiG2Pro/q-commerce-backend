@@ -108,6 +108,39 @@ const config = defineConfig({
               is_sandbox: process.env.ZALOPAY_IS_SANDBOX === "true",
             },
           },
+          {
+            resolve: "./src/modules/cod-payment",
+            id: "cod",
+            options: {},
+          },
+          // Stripe provider - temporarily disabled until properly configured
+          // Uncomment and configure when ready to use
+          // {
+          //   resolve: "@medusajs/medusa-payment-stripe",
+          //   id: "stripe",
+          //   options: {
+          //     apiKey: process.env.STRIPE_API_KEY,
+          //     webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+          //   },
+          // },
+        ],
+      },
+    },
+
+    // Fulfillment Module
+    {
+      resolve: "@medusajs/medusa/fulfillment",
+      options: {
+        providers: [
+          {
+            resolve: "./src/modules/inhouse-fulfillment",
+            id: "inhouse-fulfillment",
+            options: {
+              default_warehouse_address: process.env.WAREHOUSE_ADDRESS || "123 Main Street, HCM City",
+              contact_phone: process.env.WAREHOUSE_PHONE || "+84123456789",
+              contact_email: process.env.WAREHOUSE_EMAIL || "warehouse@company.com",
+            },
+          },
         ],
       },
     },
