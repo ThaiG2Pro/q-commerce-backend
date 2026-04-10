@@ -224,6 +224,24 @@ Sau khi deploy thành công:
 
 ## Step 7: Post-Deployment Setup
 
+### 7.0 Zalo Domain Verification (HTML file)
+
+Backend đã cấu hình route phục vụ trực tiếp file xác thực:
+
+```text
+https://q-commerce-backend-1.onrender.com/zalo_verifierCjQVC-wW6MyIahDWnP8qGHIYbrxur440EJSr.html
+```
+
+Nguồn file trong repo:
+
+```text
+zalo_verifierCjQVC-wW6MyIahDWnP8qGHIYbrxur440EJSr.html
+```
+
+Lưu ý:
+- Không xóa file này sau khi verify thành công.
+- Nếu Zalo cấp file challenge mới, cần cập nhật file + route tương ứng rồi deploy lại.
+
 ### 7.1 Create Admin User
 
 SSH vào server hoặc dùng Render Shell:
