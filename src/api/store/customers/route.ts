@@ -1,0 +1,113 @@
+import { createCustomerAccountWorkflow } from "@medusajs/core-flows"
+import { MedusaResponse, MedusaStoreRequest } from "@medusajs/framework/http"
+import { ContainerRegistrationKeys, MedusaError, Modules } from "@medusajs/framework/utils"
+import { AuthIdentityDTO } from "@medusajs/framework/types"
+import { refetchEntity } from "../_shared/refetch"
+
+type CreateCustomerBody = {
+  email?: string
+  first_name?: string
+  last_name?: string
+}
+
+const PLACEHOLDER_EMAILS = new Set(["guest@example.com"])
+
+function splitName(name?: unknown): { first_name?: string; last_name?: string } {
+  if (typeof name !== "string" || !name.trim()) {
+    return {}
+  }
+
+  const normalized = name.trim().split(/\s+/)
+  if (normalized.length === 1) {
+    return { first_name: normalized[0] }
+  }
+
+  return {
+    first_name: normalized[0],
+    last_name: normalized.slice(1).join(" "),
+  }
+}
+
+function isPlaceholderEmail(email?: string): boolean {
+  if (!email) {
+    return true
+  }
+
+  if (PLACEHOLDER_EMAILS.has(email)) {
+    return true
+  }
+
+  return email.endsWith("@miniapp.local")
+}
+
+function getZaloIdentity(authIdentity?: AuthIdentityDTO) {
+  return authIdentity?.provider_identities?.find(
+    (identity) =>
+      identity.provider === "zalo" ||
+      identity.provider_metadata?.provider === "zalo"
+  )
+}
+
+export async function POST(req: MedusaStoreRequest<CreateCustomerBody>, res: MedusaResponse) {
+  const authContext = req.auth_context
+
+  if (authContext?.actor_id) {
+    throw new MedusaError(
+      MedusaError.Types.INVALID_DATA,
+      "Request already authenticated as a customer."
+    )
+  }
+
+  const customerData: CreateCustomerBody = {
+    ...req.validatedBody,
+  }
+
+  const authIdentityId = authContext?.auth_identity_id
+  if (!authIdentityId) {
+    throw new MedusaError(
+      MedusaError.Types.UNAUTHORIZED,
+      "Authentication identity is required to create a customer."
+    )
+  }
+
+  if (authIdentityId) {
+    const authService = req.scope.resolve(Modules.AUTH)
+    const authIdentity = (await authService.retrieveAuthIdentity(authIdentityId, {
+      relations: ["provider_identities"],
+    })) as AuthIdentityDTO
+
+    const zaloIdentity = getZaloIdentity(authIdentity)
+    const metadata = zaloIdentity?.user_metadata ?? {}
+    const zaloId =
+      typeof metadata.zalo_id === "string" && metadata.zalo_id.length
+        ? metadata.zalo_id
+        : undefined
+
+    if (isPlaceholderEmail(customerData.email) && zaloId) {
+      customerData.email = `zalo_${zaloId}@miniapp.local`
+    }
+
+    if (!customerData.first_name || !customerData.last_name) {
+      const parsedName = splitName(metadata.name)
+      customerData.first_name = customerData.first_name || parsedName.first_name
+      customerData.last_name = customerData.last_name || parsedName.last_name
+    }
+  }
+
+  const { result } = await createCustomerAccountWorkflow(req.scope).run({
+    input: {
+      customerData,
+      authIdentityId,
+    },
+  })
+
+  const customer = await refetchEntity(req, "customer", result.id)
+  if (!customer) {
+    throw new MedusaError(
+      MedusaError.Types.NOT_FOUND,
+      `Customer with id: ${result.id} was not found`
+    )
+  }
+
+  res.status(200).json({ customer })
+}

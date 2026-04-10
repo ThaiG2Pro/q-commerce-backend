@@ -3,6 +3,10 @@ import { loadEnv, defineConfig, Modules, ContainerRegistrationKeys } from '@medu
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
 const isProduction = process.env.NODE_ENV === "production"
+const isRedisEnabled =
+  !!process.env.REDIS_URL &&
+  process.env.ENABLE_REDIS_MODULES !== "false" &&
+  !process.env.REDIS_URL.includes("_ro")
 
 const config = defineConfig({
   projectConfig: {
@@ -38,8 +42,8 @@ const config = defineConfig({
     disable: isProduction,
   },
   modules: [
-    // Redis modules — only registered when REDIS_URL is available and not read-only
-    ...(process.env.REDIS_URL && !process.env.REDIS_URL.includes('_ro') ? [
+    // Redis modules — can be disabled with ENABLE_REDIS_MODULES=false
+    ...(isRedisEnabled ? [
       {
         resolve: "@medusajs/medusa/event-bus-redis",
         options: {

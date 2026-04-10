@@ -411,6 +411,25 @@ databaseDriverOptions: {
 - Verify Redis server allows connections from Render IPs
 - Check Redis Cloud security settings
 
+### Issue: Cart API trả `500 unknown_error` + log `ERR max requests limit exceeded` (Upstash)
+
+**Nguyên nhân**: Redis free tier vượt quota request, làm workflow/event bus Redis lỗi và lan sang Store APIs.
+
+**Cách xử lý ngay**:
+```bash
+# Render Environment
+ENABLE_REDIS_MODULES=false
+```
+
+Sau khi set biến trên, redeploy service để backend fallback sang in-memory modules.
+
+**Cách xử lý lâu dài**:
+- Nâng gói Redis hoặc reset/đổi Redis instance.
+- Khi Redis ổn định lại, bật lại:
+```bash
+ENABLE_REDIS_MODULES=true
+```
+
 ### Issue: Stripe webhooks not working
 
 **Solution**:

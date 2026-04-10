@@ -40,6 +40,10 @@ Hệ thống Q-Commerce được xây dựng trên Medusa v2, tích hợp đầy
 4. Lấy profile (`id`, `name`, `picture`) và upsert `auth_identity` theo `zalo_id`.
 5. Trả JWT cho frontend.
 
+**Lưu ý backend hiện tại**:
+- Khi gọi `POST /store/customers` sau login Zalo, backend sẽ tự chuẩn hóa email placeholder (`guest@example.com`, `*@miniapp.local`) thành email ổn định theo `zalo_id` nếu có.
+- Nếu thiếu `first_name/last_name`, backend sẽ tự tách từ `name` trong `user_metadata` của Zalo identity.
+
 **Quy ước user mới**:
 - Nếu token decode có `actor_id` rỗng, frontend tiếp tục gọi:
   - `POST /store/customers` (tạo customer)
@@ -49,6 +53,106 @@ Hệ thống Q-Commerce được xây dựng trên Medusa v2, tích hợp đầy
 ```bash
 ZALO_APP_SECRET=your-zalo-app-secret
 ```
+
+### Validation Checklist (Zalo customer + cart diagnostics)
+
+> Mục tiêu: xác nhận các fix backend mới cho `/store/customers`, `/store/carts`, `/store/carts/:id` hoạt động end-to-end và dữ liệu được persist đúng.
+
+#### Chuẩn bị
+- [ ] Có `access_token` Zalo hợp lệ cho user test mới.
+- [ ] Backend chạy local/prod và có quyền đọc DB + logs.
+- [ ] Set biến shell:
+  ```bash
+  BASE_URL=http://localhost:9000
+  ```
+
+#### 1) First login Zalo → tạo customer + persist profile chuẩn hóa
+- [ ] Đăng nhập:
+  ```bash
+  curl -s -X POST "$BASE_URL/auth/customer/zalo" \
+    -H "Content-Type: application/json" \
+    -d '{"access_token":"<zalo_access_token>"}'
+  ```
+  Kỳ vọng: trả `token`.
+- [ ] Gọi tạo customer (trường hợp token chưa có `actor_id`):
+  ```bash
+  curl -s -X POST "$BASE_URL/store/customers" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer <customer_jwt>" \
+    -d '{"email":"guest@example.com","first_name":"","last_name":""}'
+  ```
+  Kỳ vọng API:
+  - `customer.email` được chuẩn hóa thành dạng `zalo_<zalo_id>@miniapp.local` (không giữ `guest@example.com`).
+  - `customer.first_name/last_name` được fill từ `user_metadata.name` nếu thiếu.
+- [ ] Refresh token:
+  ```bash
+  curl -s -X POST "$BASE_URL/auth/token/refresh" \
+    -H "Authorization: Bearer <customer_jwt>"
+  ```
+  Kỳ vọng: token mới có `actor_id/customer_id`.
+- [ ] Kiểm tra DB:
+  ```sql
+  SELECT id, email, first_name, last_name FROM customer WHERE id = '<customer_id>';
+  ```
+  Kỳ vọng: email đã normalize, tên đã persist đúng trên entity `customer`.
+
+#### 2) Customer profile update + address update persistence
+- [ ] Update profile:
+  ```bash
+  curl -s -X POST "$BASE_URL/store/customers/me" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer <customer_jwt>" \
+    -d '{"first_name":"Anh","last_name":"Nguyen","phone":"+84901234567"}'
+  ```
+  Kỳ vọng: response `customer` phản ánh giá trị mới.
+- [ ] Tạo address:
+  ```bash
+  curl -s -X POST "$BASE_URL/store/customers/me/addresses" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer <customer_jwt>" \
+    -d '{"first_name":"Anh","last_name":"Nguyen","address_1":"123 Nguyen Trai","city":"HCM","country_code":"vn","phone":"+84901234567"}'
+  ```
+  Kỳ vọng: response có `address.id`.
+- [ ] Kiểm tra DB:
+  ```sql
+  SELECT id, first_name, last_name, phone FROM customer WHERE id = '<customer_id>';
+  SELECT id, customer_id, address_1, city, country_code FROM customer_address WHERE customer_id = '<customer_id>' ORDER BY created_at DESC LIMIT 1;
+  ```
+  Kỳ vọng: profile + address mới tồn tại, `customer_id` map đúng.
+
+#### 3) Cart create/update + capture stacktrace khi lỗi 500
+- [ ] Tạo cart:
+  ```bash
+  curl -s -X POST "$BASE_URL/store/carts" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer <customer_jwt>" \
+    -d '{"region_id":"<region_id>"}'
+  ```
+  Kỳ vọng: response có `cart.id`, `customer_id` đúng với user.
+- [ ] Update cart:
+  ```bash
+  curl -s -X POST "$BASE_URL/store/carts/<cart_id>" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer <customer_jwt>" \
+    -d '{"additional_data":{"debug_source":"validation-checklist"}}'
+  ```
+  Kỳ vọng: `cart.additional_data.debug_source = "validation-checklist"`.
+- [ ] Kiểm tra DB:
+  ```sql
+  SELECT id, customer_id, region_id FROM cart WHERE id = '<cart_id>';
+  ```
+  Kỳ vọng: cart được persist và gắn đúng customer.
+- [ ] Kiểm tra logs khi gặp 500 (cả local/prod):
+  - Có stacktrace/error object từ `logger.error(error)`.
+  - Có log context:
+    - `POST /store/carts failed (region_id=..., customer_id=..., currency_code=...)`
+    - `POST /store/carts/<id> failed (keys=...)`
+  - Với Render:
+    ```bash
+    # ví dụ: lọc nhanh theo route
+    # render logs --service <service-id> | grep "POST /store/carts"
+    ```
+  Kỳ vọng: đủ stack + context để trace root cause 500.
 
 ---
 
