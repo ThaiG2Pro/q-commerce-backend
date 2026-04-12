@@ -38,6 +38,20 @@ export const CreateStoreCustomerSchema = z.object({
 export type PostStoreCustomersBody = z.infer<typeof CreateStoreCustomerSchema>
 
 /**
+ * Auth Schemas
+ */
+export const AuthZaloSchema = z
+  .object({
+    access_token: z.string().min(1).optional(),
+    accessToken: z.string().min(1).optional(),
+  })
+  .refine((data: { access_token?: string; accessToken?: string }) => !!(data.access_token || data.accessToken), {
+    message: "access_token or accessToken is required",
+  })
+
+export type PostAuthZaloBody = z.infer<typeof AuthZaloSchema>
+
+/**
  * Middleware Configuration
  * 
  * Note: OPTIONS requests are automatically handled by Medusa framework.
@@ -62,6 +76,13 @@ export default defineMiddlewares({
       matcher: "/store/customers",
       method: "POST",
       middlewares: [validateAndTransformBody(CreateStoreCustomerSchema)],
+    },
+
+    // Auth alias for Zalo mini app
+    {
+      matcher: "/auth/zalo",
+      method: "POST",
+      middlewares: [validateAndTransformBody(AuthZaloSchema)],
     },
   ],
 })
