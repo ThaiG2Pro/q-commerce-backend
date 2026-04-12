@@ -1,14 +1,10 @@
 import { createCartWorkflow } from "@medusajs/core-flows"
 import { MedusaResponse, MedusaStoreRequest } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
+import type { PostStoreCartsBody } from "../../middlewares"
 import { refetchEntity } from "../_shared/refetch"
 
-type CartCreateBody = {
-  region_id?: string
-  currency_code?: string
-}
-
-export async function POST(req: MedusaStoreRequest<CartCreateBody>, res: MedusaResponse) {
+export async function POST(req: MedusaStoreRequest<PostStoreCartsBody>, res: MedusaResponse) {
   const logger = req.scope.resolve(ContainerRegistrationKeys.LOGGER)
   const workflowInput = {
     ...req.validatedBody,

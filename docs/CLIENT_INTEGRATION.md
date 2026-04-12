@@ -589,6 +589,8 @@ if (!payload.actor_id) {
 localStorage.setItem("medusa_token", token)
 ```
 
+> Nếu team đang gọi REST trực tiếp thay vì SDK, backend cũng cung cấp alias `POST /auth/zalo` để đi qua cùng luồng Zalo auth hiện tại.
+
 ---
 
 ## 9. Error Handling

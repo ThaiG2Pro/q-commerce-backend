@@ -2,13 +2,8 @@ import { createCustomerAccountWorkflow } from "@medusajs/core-flows"
 import { MedusaResponse, MedusaStoreRequest } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, MedusaError, Modules } from "@medusajs/framework/utils"
 import { AuthIdentityDTO } from "@medusajs/framework/types"
+import type { PostStoreCustomersBody } from "../../middlewares"
 import { refetchEntity } from "../_shared/refetch"
-
-type CreateCustomerBody = {
-  email?: string
-  first_name?: string
-  last_name?: string
-}
 
 const PLACEHOLDER_EMAILS = new Set(["guest@example.com"])
 
@@ -48,7 +43,7 @@ function getZaloIdentity(authIdentity?: AuthIdentityDTO) {
   )
 }
 
-export async function POST(req: MedusaStoreRequest<CreateCustomerBody>, res: MedusaResponse) {
+export async function POST(req: MedusaStoreRequest<PostStoreCustomersBody>, res: MedusaResponse) {
   const authContext = req.auth_context
 
   if (authContext?.actor_id) {
@@ -58,7 +53,7 @@ export async function POST(req: MedusaStoreRequest<CreateCustomerBody>, res: Med
     )
   }
 
-  const customerData: CreateCustomerBody = {
+  const customerData: PostStoreCustomersBody = {
     ...req.validatedBody,
   }
 

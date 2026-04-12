@@ -23,6 +23,7 @@ Hệ thống Q-Commerce được xây dựng trên Medusa v2, tích hợp đầy
 ## Zalo Authentication Flow
 
 **Endpoint**: `POST /auth/customer/zalo`  
+**Compatibility alias**: `POST /auth/zalo`  
 **Request body**:
 ```json
 {
@@ -74,6 +75,7 @@ ZALO_APP_SECRET=your-zalo-app-secret
     -d '{"access_token":"<zalo_access_token>"}'
   ```
   Kỳ vọng: trả `token`.
+  - Nếu client đang dùng path ngắn, `POST /auth/zalo` cũng trả cùng kết quả.
 - [ ] Gọi tạo customer (trường hợp token chưa có `actor_id`):
   ```bash
   curl -s -X POST "$BASE_URL/store/customers" \
