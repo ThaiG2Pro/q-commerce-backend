@@ -247,6 +247,49 @@ Các endpoint này hỗ trợ client mini app map dữ liệu ổn định.
 
 ---
 
+### 4. Customer Orders (User-scoped)
+
+Các endpoint này yêu cầu token customer hợp lệ (`Authorization: Bearer <customer_token>`).
+
+#### 4.1 List Orders
+- **Endpoint**: `GET /store/orders`
+- **Response**:
+```json
+{
+  "orders": [
+    {
+      "id": "order_01HXXX",
+      "items": [],
+      "total": 150000,
+      "created_at": "2024-01-15T10:30:00.000Z",
+      "payment_status": "captured",
+      "fulfillment_status": "delivered"
+    }
+  ],
+  "count": 1
+}
+```
+
+#### 4.2 Get Order Detail
+- **Endpoint**: `GET /store/orders/:id`
+- **Response**:
+```json
+{
+  "order": {
+    "id": "order_01HXXX",
+    "items": [],
+    "total": 150000,
+    "created_at": "2024-01-15T10:30:00.000Z",
+    "payment_status": "captured",
+    "fulfillment_status": "delivered"
+  }
+}
+```
+
+404 sẽ được trả khi order không tồn tại hoặc không thuộc customer hiện tại.
+
+---
+
 ## Admin APIs (Protected - Staff/Admin Only)
 
 ### 3. Update Fulfillment Status

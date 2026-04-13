@@ -1,4 +1,8 @@
-import { defineMiddlewares, validateAndTransformBody } from "@medusajs/framework/http"
+import {
+  authenticate,
+  defineMiddlewares,
+  validateAndTransformBody,
+} from "@medusajs/framework/http"
 import { z } from "zod"
 
 /**
@@ -85,6 +89,16 @@ export default defineMiddlewares({
       matcher: "/auth/zalo",
       method: "POST",
       middlewares: [validateAndTransformBody(AuthZaloSchema)],
+    },
+    {
+      matcher: "/store/orders",
+      method: "GET",
+      middlewares: [authenticate("customer", ["session", "bearer"])],
+    },
+    {
+      matcher: "/store/orders/:id",
+      method: "GET",
+      middlewares: [authenticate("customer", ["session", "bearer"])],
     },
   ],
 })

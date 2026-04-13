@@ -4,6 +4,12 @@ import type { PostAuthZaloBody } from "../../middlewares"
 
 type CustomerAuthResponse = {
   customer?: {
+    id?: string
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    phone?: string | null
+    metadata?: Record<string, unknown>
     token?: string
   }
   token?: string
@@ -11,6 +17,15 @@ type CustomerAuthResponse = {
   access_token?: string
   jwt?: string
   [key: string]: unknown
+}
+
+type CustomerContractShape = {
+  id: string
+  first_name: string | null
+  last_name: string | null
+  email: string | null
+  phone: string | null
+  metadata: Record<string, unknown>
 }
 
 function getBaseUrl(req: MedusaRequest): string {
@@ -65,6 +80,40 @@ async function readJsonSafe(response: Response): Promise<Record<string, unknown>
   }
 }
 
+function asRecord(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : undefined
+}
+
+function asNullableString(value: unknown): string | null {
+  return typeof value === "string" ? value : null
+}
+
+function buildCustomerShape(value: unknown): CustomerContractShape | undefined {
+  const customer = asRecord(value)
+  if (!customer) {
+    return undefined
+  }
+
+  const id = typeof customer.id === "string" ? customer.id : undefined
+  if (!id) {
+    return undefined
+  }
+
+  const metadata =
+    customer.metadata && typeof customer.metadata === "object"
+      ? (customer.metadata as Record<string, unknown>)
+      : {}
+
+  return {
+    id,
+    first_name: asNullableString(customer.first_name),
+    last_name: asNullableString(customer.last_name),
+    email: asNullableString(customer.email),
+    phone: asNullableString(customer.phone),
+    metadata,
+  }
+}
+
 export async function POST(req: MedusaRequest<PostAuthZaloBody>, res: MedusaResponse) {
   const accessToken = req.validatedBody.access_token || req.validatedBody.accessToken
 
@@ -115,13 +164,23 @@ export async function POST(req: MedusaRequest<PostAuthZaloBody>, res: MedusaResp
 
   if (!profileResponse.ok) {
     // For newly-authenticated users without actor_id, profile might not exist yet.
-    return res.status(200).json(normalizedAuthData)
+    const fallbackCustomer = buildCustomerShape(authData.customer)
+
+    return res.status(200).json({
+      ...normalizedAuthData,
+      customer: fallbackCustomer || authData.customer || null,
+    })
   }
 
   const profileData = await readJsonSafe(profileResponse)
+  const normalizedCustomer =
+    buildCustomerShape(profileData.customer) ||
+    buildCustomerShape(profileData) ||
+    buildCustomerShape(authData.customer)
 
   return res.status(200).json({
     ...normalizedAuthData,
+    customer: normalizedCustomer || null,
     profile: profileData.customer ?? profileData,
   })
 }
