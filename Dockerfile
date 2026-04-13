@@ -12,9 +12,8 @@ RUN apk add --no-cache python3 make g++ vips-dev
 # Copy các file quản lý dependency
 COPY package.json pnpm-lock.yaml ./
 
-# Cài đặt dependency
+# Cài đặt dependency (non-interactive, scripts được whitelist trong package.json)
 RUN pnpm install --frozen-lockfile
-RUN pnpm approve-builds
 
 # Copy toàn bộ code vào
 COPY . .

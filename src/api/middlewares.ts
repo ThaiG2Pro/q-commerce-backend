@@ -7,6 +7,7 @@ import { z } from "zod"
 export const CreateStoreCartSchema = z.object({
   region_id: z.string().optional(),
   currency_code: z.string().optional(),
+  additional_data: z.record(z.unknown()).optional(),
   items: z.array(z.object({
     variant_id: z.string(),
     quantity: z.number().positive(),
@@ -20,6 +21,7 @@ export const UpdateStoreCartSchema = z.object({
   region_id: z.string().optional(),
   currency_code: z.string().optional(),
   customer_id: z.string().optional(),
+  additional_data: z.record(z.unknown()).optional(),
 })
 
 export type PostStoreCartByIdBody = z.infer<typeof UpdateStoreCartSchema>
