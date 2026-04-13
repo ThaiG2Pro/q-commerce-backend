@@ -6,6 +6,10 @@ type CustomerAuthResponse = {
   customer?: {
     token?: string
   }
+  token?: string
+  accessToken?: string
+  access_token?: string
+  jwt?: string
   [key: string]: unknown
 }
 
@@ -27,6 +31,22 @@ function getBaseUrl(req: MedusaRequest): string {
 }
 
 function parseToken(payload: CustomerAuthResponse): string | undefined {
+  if (typeof payload.token === "string" && payload.token) {
+    return payload.token
+  }
+
+  if (typeof payload.accessToken === "string" && payload.accessToken) {
+    return payload.accessToken
+  }
+
+  if (typeof payload.access_token === "string" && payload.access_token) {
+    return payload.access_token
+  }
+
+  if (typeof payload.jwt === "string" && payload.jwt) {
+    return payload.jwt
+  }
+
   const customer = payload.customer
   if (!customer || typeof customer !== "object") {
     return undefined
@@ -77,6 +97,14 @@ export async function POST(req: MedusaRequest<PostAuthZaloBody>, res: MedusaResp
     return res.status(200).json(authData)
   }
 
+  const normalizedAuthData = {
+    ...authData,
+    token,
+    accessToken: token,
+    access_token: token,
+    jwt: token,
+  }
+
   const profileResponse = await fetch(`${baseUrl}/store/customers/me`, {
     method: "GET",
     headers: {
@@ -87,13 +115,13 @@ export async function POST(req: MedusaRequest<PostAuthZaloBody>, res: MedusaResp
 
   if (!profileResponse.ok) {
     // For newly-authenticated users without actor_id, profile might not exist yet.
-    return res.status(200).json(authData)
+    return res.status(200).json(normalizedAuthData)
   }
 
   const profileData = await readJsonSafe(profileResponse)
 
   return res.status(200).json({
-    ...authData,
+    ...normalizedAuthData,
     profile: profileData.customer ?? profileData,
   })
 }

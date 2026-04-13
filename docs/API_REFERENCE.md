@@ -192,6 +192,61 @@ fulfillments.forEach(f => {
 
 ---
 
+### 3. Storefront Support Endpoints
+
+Các endpoint này hỗ trợ client mini app map dữ liệu ổn định.
+
+#### 3.1 Storefront Profile
+- **Endpoint**: `GET /store/storefront-profile`
+- **Authentication**: Không bắt buộc
+- **Response**:
+```json
+{
+  "storefront": {
+    "shop_name": "Q-Commerce",
+    "shop_address": "123 Example Street",
+    "logo_url": "https://cdn.example.com/logo.png"
+  }
+}
+```
+
+#### 3.2 Branches
+- **Endpoint**: `GET /store/branches`
+- **Authentication**: Không bắt buộc
+- **Response**:
+```json
+{
+  "branches": [
+    {
+      "name": "Chi nhánh trung tâm",
+      "address": "123 Nguyen Trai, HCM, VN",
+      "location": {
+        "lat": 10.7769,
+        "lng": 106.7009
+      }
+    }
+  ]
+}
+```
+
+#### 3.3 Loyalty Profile
+- **Endpoint**: `GET /store/loyalty-profile`
+- **Authentication**: Tùy chọn (có token customer sẽ trả dữ liệu theo customer metadata)
+- **Response**:
+```json
+{
+  "loyalty_profile": {
+    "points": 120,
+    "expiry_date": "2026-12-31",
+    "expiryDate": "2026-12-31",
+    "barcode_value": "LOYALTY-123",
+    "barcodeValue": "LOYALTY-123"
+  }
+}
+```
+
+---
+
 ## Admin APIs (Protected - Staff/Admin Only)
 
 ### 3. Update Fulfillment Status
