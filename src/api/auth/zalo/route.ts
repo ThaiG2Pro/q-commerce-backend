@@ -70,6 +70,28 @@ function parseToken(payload: CustomerAuthResponse): string | undefined {
   return typeof customer.token === "string" ? customer.token : undefined
 }
 
+async function fetchCustomerProfile(
+  baseUrl: string,
+  token: string
+): Promise<{ ok: boolean; data?: Record<string, unknown> }> {
+  const profileResponse = await fetch(`${baseUrl}/store/customers/me`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!profileResponse.ok) {
+    return { ok: false }
+  }
+
+  return {
+    ok: true,
+    data: await readJsonSafe(profileResponse),
+  }
+}
+
 async function readJsonSafe(response: Response): Promise<Record<string, unknown>> {
   const text = await response.text()
 
@@ -154,32 +176,64 @@ export async function POST(req: MedusaRequest<PostAuthZaloBody>, res: MedusaResp
     jwt: token,
   }
 
-  const profileResponse = await fetch(`${baseUrl}/store/customers/me`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
+  let activeToken = token
+  let profileResult = await fetchCustomerProfile(baseUrl, activeToken)
 
-  if (!profileResponse.ok) {
-    // For newly-authenticated users without actor_id, profile might not exist yet.
+  if (!profileResult.ok) {
+    // New user flow: create/find customer from auth identity, then refresh token.
+    await fetch(`${baseUrl}/store/customers`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${activeToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+
+    const refreshResponse = await fetch(`${baseUrl}/auth/token/refresh`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${activeToken}`,
+        "Content-Type": "application/json",
+      },
+    })
+
+    if (refreshResponse.ok) {
+      const refreshData = (await readJsonSafe(refreshResponse)) as CustomerAuthResponse
+      const refreshedToken = parseToken(refreshData)
+
+      if (refreshedToken) {
+        activeToken = refreshedToken
+        profileResult = await fetchCustomerProfile(baseUrl, activeToken)
+      }
+    }
+  }
+
+  const finalPayload = {
+    ...normalizedAuthData,
+    token: activeToken,
+    accessToken: activeToken,
+    access_token: activeToken,
+    jwt: activeToken,
+  }
+
+  if (!profileResult.ok || !profileResult.data) {
     const fallbackCustomer = buildCustomerShape(authData.customer)
 
     return res.status(200).json({
-      ...normalizedAuthData,
+      ...finalPayload,
       customer: fallbackCustomer || authData.customer || null,
     })
   }
 
-  const profileData = await readJsonSafe(profileResponse)
+  const profileData = profileResult.data
   const normalizedCustomer =
     buildCustomerShape(profileData.customer) ||
     buildCustomerShape(profileData) ||
     buildCustomerShape(authData.customer)
 
   return res.status(200).json({
-    ...normalizedAuthData,
+    ...finalPayload,
     customer: normalizedCustomer || null,
     profile: profileData.customer ?? profileData,
   })
