@@ -40,6 +40,7 @@ Authorization: Bearer {jwt_token}
 |---|---|---|
 | `POST /auth/zalo` | Không cần customer token | Trả `token` + aliases (`accessToken`, `access_token`, `jwt`) + `customer` |
 | `GET /store/storefront-profile` | Public | Trả `storefront.shop_name/shop_address/logo_url` |
+| `GET /store/store` | Public | Compatibility route, trả cả `store` và `storefront` branding |
 | `GET /store/branches` | Public | Trả `branches[]` gồm `name/address/location.lat/lng` |
 | `GET /store/loyalty-profile` | Optional auth | Có token thì đọc metadata customer; không token trả default profile |
 | `GET /store/orders` | Customer token + publishable key | Trả `orders[]` với shape ổn định |

@@ -8,17 +8,6 @@ Tài liệu này hướng dẫn Frontend developers tích hợp với Medusa bac
 
 ---
 
-## Cài Đặt
-
-### Install Medusa JS SDK
-```bash
-npm install @medusajs/js-sdk
-# or
-yarn add @medusajs/js-sdk
-# or
-pnpm add @medusajs/js-sdk
-```
-
 ### Initialize SDK
 ```typescript
 // src/lib/medusa.ts
