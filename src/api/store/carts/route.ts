@@ -6,9 +6,10 @@ import { refetchEntity } from "../_shared/refetch"
 
 export async function POST(req: MedusaStoreRequest<PostStoreCartsBody>, res: MedusaResponse) {
   const logger = req.scope.resolve(ContainerRegistrationKeys.LOGGER)
+  const actorId = req.auth_context?.actor_id
   const workflowInput = {
     ...req.validatedBody,
-    customer_id: req.auth_context?.actor_id,
+    ...(actorId ? { customer_id: actorId } : {}),
   }
 
   try {

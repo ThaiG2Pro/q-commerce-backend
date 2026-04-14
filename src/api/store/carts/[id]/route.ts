@@ -1,5 +1,5 @@
 import { updateCartWorkflowId } from "@medusajs/core-flows"
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { MedusaRequest, MedusaResponse, MedusaStoreRequest } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, MedusaError, Modules } from "@medusajs/framework/utils"
 import type { PostStoreCartByIdBody } from "../../../middlewares"
 import { refetchEntity } from "../../_shared/refetch"
@@ -16,13 +16,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   res.json({ cart })
 }
 
-export async function POST(req: MedusaRequest<PostStoreCartByIdBody>, res: MedusaResponse) {
+export async function POST(req: MedusaStoreRequest<PostStoreCartByIdBody>, res: MedusaResponse) {
   const logger = req.scope.resolve(ContainerRegistrationKeys.LOGGER)
   const workflowEngine = req.scope.resolve(Modules.WORKFLOW_ENGINE)
+  const actorId = req.auth_context?.actor_id
   const workflowInput = {
     ...req.validatedBody,
     id: req.params.id,
     additional_data: req.validatedBody.additional_data,
+    ...(actorId ? { customer_id: actorId } : {}),
   }
 
   try {

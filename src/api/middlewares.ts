@@ -5,6 +5,18 @@ import {
 } from "@medusajs/framework/http"
 import { z } from "zod"
 
+const optionalNonEmptyString = z.preprocess(
+  (value) => {
+    if (typeof value !== "string") {
+      return value
+    }
+
+    const trimmed = value.trim()
+    return trimmed.length ? trimmed : undefined
+  },
+  z.string().optional()
+)
+
 /**
  * Store Cart Schemas
  */
@@ -16,7 +28,7 @@ export const CreateStoreCartSchema = z.object({
     variant_id: z.string(),
     quantity: z.number().positive(),
   })).optional(),
-  customer_id: z.string().optional(),
+  customer_id: optionalNonEmptyString,
 })
 
 export type PostStoreCartsBody = z.infer<typeof CreateStoreCartSchema>
@@ -24,7 +36,7 @@ export type PostStoreCartsBody = z.infer<typeof CreateStoreCartSchema>
 export const UpdateStoreCartSchema = z.object({
   region_id: z.string().optional(),
   currency_code: z.string().optional(),
-  customer_id: z.string().optional(),
+  customer_id: optionalNonEmptyString,
   additional_data: z.record(z.unknown()).optional(),
 })
 
