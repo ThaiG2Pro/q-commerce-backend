@@ -23,6 +23,90 @@ Authorization: Bearer {jwt_token}
 
 ---
 
+## Contract nhanh cho client fetch tay
+
+### Header rules
+
+| Loại endpoint | Header bắt buộc |
+|---|---|
+| Store built-in/public (`/store/*`) | `x-publishable-api-key` |
+| Store user-scoped (`/store/*` có user data) | `x-publishable-api-key` + `Authorization: Bearer <customer_token>` |
+| Custom auth alias (`/auth/zalo`) | `Content-Type: application/json` |
+| Admin routes (`/admin/*`) | `Authorization: Bearer <admin_token>` |
+
+### Custom APIs (đang được server maintain)
+
+| Endpoint | Auth | Ghi chú response |
+|---|---|---|
+| `POST /auth/zalo` | Không cần customer token | Trả `token` + aliases (`accessToken`, `access_token`, `jwt`) + `customer` |
+| `GET /store/storefront-profile` | Public | Trả `storefront.shop_name/shop_address/logo_url` |
+| `GET /store/branches` | Public | Trả `branches[]` gồm `name/address/location.lat/lng` |
+| `GET /store/loyalty-profile` | Optional auth | Có token thì đọc metadata customer; không token trả default profile |
+| `GET /store/orders` | Customer token + publishable key | Trả `orders[]` với shape ổn định |
+| `GET /store/orders/:id` | Customer token + publishable key | Trả `order` với shape ổn định hoặc 404 |
+| `GET /store/orders/:id/fulfillments` | Optional | Trả status tracking |
+| `POST /store/orders/:id/cod-capture` | Theo policy hiện tại | Capture COD payment |
+
+### `POST /auth/zalo` contract
+
+**Request**
+```json
+{
+  "accessToken": "<zalo_access_token>"
+}
+```
+
+**Success Response (200)**
+```json
+{
+  "token": "<medusa_customer_token>",
+  "accessToken": "<medusa_customer_token>",
+  "access_token": "<medusa_customer_token>",
+  "jwt": "<medusa_customer_token>",
+  "customer": {
+    "id": "cus_...",
+    "first_name": "Thai",
+    "last_name": "Nguyen",
+    "email": "zalo_xxx@miniapp.local",
+    "phone": null,
+    "metadata": {}
+  },
+  "profile": {
+    "id": "cus_...",
+    "email": "zalo_xxx@miniapp.local"
+  }
+}
+```
+
+**Error Response (401 ví dụ)**
+```json
+{
+  "type": "unauthorized",
+  "message": "Invalid appsecret_proof provided in the API argument"
+}
+```
+
+### `GET /store/orders` contract
+
+**Success Response (200)**
+```json
+{
+  "orders": [
+    {
+      "id": "order_01...",
+      "items": [],
+      "total": 150000,
+      "created_at": "2026-04-14T03:00:00.000Z",
+      "payment_status": "captured",
+      "fulfillment_status": "delivered"
+    }
+  ],
+  "count": 1
+}
+```
+
+---
+
 ## Store APIs (Public - Customer Facing)
 
 ### 1. Capture COD Payment

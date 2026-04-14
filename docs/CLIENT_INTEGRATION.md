@@ -30,6 +30,38 @@ export const medusa = new Medusa({
 })
 ```
 
+### SDK-first policy (khuyến nghị)
+
+- **Built-in Medusa endpoints**: luôn ưu tiên gọi bằng SDK method (`medusa.store.cart.*`, `medusa.store.product.*`, ...).
+- **Custom endpoints**: dùng `medusa.client.fetch("/path", ...)`.
+- Chỉ fetch tay khi thật sự cần debug; nếu fetch tay phải tự gắn đúng header.
+
+| Nhu cầu client | Built-in SDK call khuyến nghị | Ghi chú |
+|---|---|---|
+| Create cart | `medusa.store.cart.create({ region_id })` | Cần `region_id` hợp lệ |
+| Get/update cart | `medusa.store.cart.retrieve(cartId)` / `medusa.store.cart.update(cartId, body)` | Tránh gọi custom wrapper cũ |
+| Line items | `createLineItem`, `updateLineItem`, `deleteLineItem` | Dùng built-in |
+| Shipping options | `medusa.store.cart.listShippingOptions(cartId)` | Built-in |
+| Payment providers/session | `cart.retrieve(...fields)`, `initializePaymentSession`, `setPaymentSession` | Built-in |
+| Complete checkout | `medusa.store.cart.complete(cartId)` | Built-in |
+| Customer me | `medusa.store.customer.retrieve()` / update me route | Cần customer token |
+| Orders | `medusa.client.fetch("/store/orders")` hoặc built-in order APIs theo SDK version | Repo hiện có custom shape ổn định |
+
+### Nếu buộc phải fetch tay
+
+```ts
+const res = await fetch(`${BASE_URL}/store/carts/${cartId}`, {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    "x-publishable-api-key": PUBLISHABLE_KEY,
+    Authorization: `Bearer ${customerToken}`, // chỉ cho user-scoped
+  },
+})
+```
+
+**Thiếu `x-publishable-api-key`** sẽ gây `400` cho nhiều Store APIs.
+
 ---
 
 ## Luồng Hoàn Chỉnh: Cart → Payment → Fulfillment
