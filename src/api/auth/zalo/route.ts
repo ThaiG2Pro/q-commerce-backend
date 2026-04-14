@@ -1,5 +1,5 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { MedusaError } from "@medusajs/framework/utils"
+import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import type { PostAuthZaloBody } from "../../middlewares"
 
 type CustomerAuthResponse = {
@@ -72,14 +72,21 @@ function parseToken(payload: CustomerAuthResponse): string | undefined {
 
 async function fetchCustomerProfile(
   baseUrl: string,
-  token: string
+  token: string,
+  publishableApiKey?: string
 ): Promise<{ ok: boolean; data?: Record<string, unknown> }> {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  }
+
+  if (publishableApiKey) {
+    headers["x-publishable-api-key"] = publishableApiKey
+  }
+
   const profileResponse = await fetch(`${baseUrl}/store/customers/me`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
+    headers,
   })
 
   if (!profileResponse.ok) {
@@ -90,6 +97,55 @@ async function fetchCustomerProfile(
     ok: true,
     data: await readJsonSafe(profileResponse),
   }
+}
+
+function readHeaderValue(req: MedusaRequest, headerName: string): string | undefined {
+  const headerValue = req.headers[headerName]
+
+  if (Array.isArray(headerValue)) {
+    return headerValue[0]
+  }
+
+  return typeof headerValue === "string" && headerValue.trim() ? headerValue : undefined
+}
+
+async function resolvePublishableApiKey(req: MedusaRequest): Promise<string | undefined> {
+  const fromHeader = readHeaderValue(req, "x-publishable-api-key")
+  if (fromHeader) {
+    return fromHeader
+  }
+
+  const fromEnv =
+    process.env.MEDUSA_PUBLISHABLE_KEY ||
+    process.env.STORE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
+
+  if (fromEnv) {
+    return fromEnv
+  }
+
+  try {
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const { data } = (await query.graph({
+      entity: "api_key",
+      fields: ["token", "id"],
+      filters: {
+        type: "publishable",
+      },
+      pagination: {
+        take: 1,
+      },
+    })) as { data: Array<Record<string, unknown>> }
+
+    const token = data?.[0]?.token
+    if (typeof token === "string" && token) {
+      return token
+    }
+  } catch {
+    return undefined
+  }
+
+  return undefined
 }
 
 async function readJsonSafe(response: Response): Promise<Record<string, unknown>> {
@@ -147,6 +203,7 @@ export async function POST(req: MedusaRequest<PostAuthZaloBody>, res: MedusaResp
   }
 
   const baseUrl = getBaseUrl(req)
+  const publishableApiKey = await resolvePublishableApiKey(req)
   const authResponse = await fetch(`${baseUrl}/auth/customer/zalo`, {
     method: "POST",
     headers: {
@@ -177,16 +234,22 @@ export async function POST(req: MedusaRequest<PostAuthZaloBody>, res: MedusaResp
   }
 
   let activeToken = token
-  let profileResult = await fetchCustomerProfile(baseUrl, activeToken)
+  let profileResult = await fetchCustomerProfile(baseUrl, activeToken, publishableApiKey)
 
   if (!profileResult.ok) {
     // New user flow: create/find customer from auth identity, then refresh token.
+    const customerHeaders: Record<string, string> = {
+      Authorization: `Bearer ${activeToken}`,
+      "Content-Type": "application/json",
+    }
+
+    if (publishableApiKey) {
+      customerHeaders["x-publishable-api-key"] = publishableApiKey
+    }
+
     await fetch(`${baseUrl}/store/customers`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${activeToken}`,
-        "Content-Type": "application/json",
-      },
+      headers: customerHeaders,
       body: JSON.stringify({}),
     })
 
@@ -204,7 +267,7 @@ export async function POST(req: MedusaRequest<PostAuthZaloBody>, res: MedusaResp
 
       if (refreshedToken) {
         activeToken = refreshedToken
-        profileResult = await fetchCustomerProfile(baseUrl, activeToken)
+        profileResult = await fetchCustomerProfile(baseUrl, activeToken, publishableApiKey)
       }
     }
   }
