@@ -18,6 +18,21 @@ const optionalNonEmptyString = z.preprocess(
 )
 
 /**
+ * Address Schema (for shipping_address and billing_address)
+ */
+const AddressSchema = z.object({
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  address_1: z.string().optional(),
+  address_2: z.string().optional(),
+  city: z.string().optional(),
+  country_code: z.string().optional(),
+  province: z.string().optional(),
+  postal_code: z.string().optional(),
+  phone: z.string().optional(),
+})
+
+/**
  * Store Cart Schemas
  */
 export const CreateStoreCartSchema = z.object({
@@ -29,6 +44,12 @@ export const CreateStoreCartSchema = z.object({
     quantity: z.number().positive(),
   })).optional(),
   customer_id: optionalNonEmptyString,
+  email: z.string().email().optional(),
+  shipping_address: AddressSchema.optional(),
+  billing_address: AddressSchema.optional(),
+  locale: z.string().optional(),
+  metadata: z.record(z.unknown()).optional(),
+  sales_channel_id: z.string().optional(),
 })
 
 export type PostStoreCartsBody = z.infer<typeof CreateStoreCartSchema>
@@ -38,6 +59,12 @@ export const UpdateStoreCartSchema = z.object({
   currency_code: z.string().optional(),
   customer_id: optionalNonEmptyString,
   additional_data: z.record(z.unknown()).optional(),
+  email: z.string().email().optional(),
+  shipping_address: AddressSchema.optional(),
+  billing_address: AddressSchema.optional(),
+  locale: z.string().optional(),
+  metadata: z.record(z.unknown()).optional(),
+  sales_channel_id: z.string().optional(),
 })
 
 export type PostStoreCartByIdBody = z.infer<typeof UpdateStoreCartSchema>
