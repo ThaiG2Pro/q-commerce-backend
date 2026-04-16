@@ -1,4 +1,4 @@
-import { AbstractPaymentProvider, BigNumber, PaymentActions } from "@medusajs/framework/utils"
+import { AbstractPaymentProvider, BigNumber, MedusaError, PaymentActions } from "@medusajs/framework/utils"
 import {
   Logger,
   ProviderWebhookPayload,
@@ -24,14 +24,13 @@ import {
   PaymentSessionStatus,
 } from "@medusajs/framework/types"
 
-type Options = {}
+type Options = {
+  qr_code_url: string
+}
 
 type InjectedDependencies = {
   logger: Logger
 }
-
-const DEMO_QR_CODE_URL =
-  "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=DEMO_PAYMENT_QR"
 
 class QRPaymentProviderService extends AbstractPaymentProvider<Options> {
   static identifier = "qr"
@@ -40,6 +39,13 @@ class QRPaymentProviderService extends AbstractPaymentProvider<Options> {
   protected options_: Options
 
   static validateOptions(options: Record<any, any>): void | never {
+    if (!options.qr_code_url) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "qr_code_url is required for QR payment provider"
+      )
+    }
+
     return
   }
 
@@ -65,7 +71,7 @@ class QRPaymentProviderService extends AbstractPaymentProvider<Options> {
         currency_code,
         status: "pending",
         payment_method: "qr",
-        qr_code_url: DEMO_QR_CODE_URL,
+        qr_code_url: this.options_.qr_code_url,
         initiated_at: new Date().toISOString(),
       },
     }
