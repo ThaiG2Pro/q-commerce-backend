@@ -1,10 +1,13 @@
 import { ThumbnailBadge } from "@medusajs/icons"
+import { Checkbox, clx } from "@medusajs/ui"
 
 type CategoryImageItemProps = {
   id: string
   url: string
   alt: string
   isThumbnail: boolean
+  isSelected: boolean
+  onToggleSelect: () => void
 }
 
 export const CategoryImageItem = ({
@@ -12,6 +15,8 @@ export const CategoryImageItem = ({
   url,
   alt,
   isThumbnail,
+  isSelected,
+  onToggleSelect,
 }: CategoryImageItemProps) => {
   return (
     <div
@@ -23,7 +28,14 @@ export const CategoryImageItem = ({
           <ThumbnailBadge />
         </div>
       )}
-      {/* TODO add selection checkbox */}
+      <div
+        className={clx(
+          "transition-fg absolute right-2 top-2 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 group-focus:opacity-100",
+          isSelected && "opacity-100"
+        )}
+      >
+        <Checkbox checked={isSelected} onCheckedChange={onToggleSelect} />
+      </div>
       <img
         src={url}
         alt={alt}

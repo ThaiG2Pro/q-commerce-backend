@@ -6,15 +6,22 @@ type CategoryImageGalleryProps = {
   existingImages: CategoryImage[]
   uploadedFiles: UploadedFile[]
   currentThumbnailId: string | null
+  imagesToDelete: Set<string>
+  selectedImageIds: Set<string>
+  onToggleSelect: (id: string, isUploaded?: boolean) => void
 }
 
 export const CategoryImageGallery = ({
   existingImages,
   uploadedFiles,
   currentThumbnailId,
+  imagesToDelete,
+  selectedImageIds,
+  onToggleSelect,
 }: CategoryImageGalleryProps) => {
-  // TODO filter deleted images
-  const visibleExistingImages = existingImages
+  const visibleExistingImages = existingImages.filter(
+    (image) => image.id && !imagesToDelete.has(image.id)
+  )
 
   const hasNoImages = visibleExistingImages.length === 0 && uploadedFiles.length === 0
 
@@ -35,6 +42,8 @@ export const CategoryImageGallery = ({
               url={image.url}
               alt={`Category ${image.type}`}
               isThumbnail={isThumbnail}
+              isSelected={selectedImageIds.has(imageId)}
+              onToggleSelect={() => onToggleSelect(imageId)}
             />
           )
         })}
@@ -51,6 +60,8 @@ export const CategoryImageGallery = ({
               url={file.url}
               alt="Uploaded"
               isThumbnail={isThumbnail}
+              isSelected={selectedImageIds.has(uploadedId)}
+              onToggleSelect={() => onToggleSelect(file.id, true)}
             />
           )
         })}
