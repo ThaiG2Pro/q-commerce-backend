@@ -118,6 +118,11 @@ const config = defineConfig({
             options: {},
           },
           {
+            resolve: "./src/modules/qr-payment",
+            id: "qr",
+            options: {},
+          },
+          {
             resolve: "@medusajs/payment-stripe",
             id: "stripe",
             options: {
