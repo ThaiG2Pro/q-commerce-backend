@@ -3,24 +3,27 @@ import { MedusaResponse, MedusaStoreRequest } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import type { PostStoreCartsBody } from "../../middlewares"
 import { refetchEntity } from "../_shared/refetch"
+import { createGuestCart } from "./_shared/guest-cart"
 
 export async function POST(req: MedusaStoreRequest<PostStoreCartsBody>, res: MedusaResponse) {
   const logger = req.scope.resolve(ContainerRegistrationKeys.LOGGER)
-  const workflowInput = {
-    ...req.validatedBody,
-    customer_id: req.auth_context?.actor_id,
-  }
+  const actorId = req.auth_context?.actor_id
 
   try {
-    const { result } = await createCartWorkflow(req.scope).run({
-      input: workflowInput,
-    })
+    const createdCart = actorId
+      ? (await createCartWorkflow(req.scope).run({
+          input: {
+            ...req.validatedBody,
+            customer_id: actorId,
+          },
+        })).result
+      : await createGuestCart(req)
 
-    const cart = await refetchEntity(req, "cart", result.id)
+    const cart = await refetchEntity(req, "cart", createdCart.id)
     if (!cart) {
       throw new MedusaError(
         MedusaError.Types.NOT_FOUND,
-        `Cart with id: ${result.id} was not found`
+        `Cart with id: ${createdCart.id} was not found`
       )
     }
 
@@ -28,7 +31,7 @@ export async function POST(req: MedusaStoreRequest<PostStoreCartsBody>, res: Med
   } catch (error) {
     logger.error(error)
     logger.error(
-      `POST /store/carts failed (region_id=${workflowInput.region_id || "n/a"}, customer_id=${workflowInput.customer_id || "guest"}, currency_code=${workflowInput.currency_code || "n/a"})`
+      `POST /store/carts failed (region_id=${req.validatedBody.region_id || "n/a"}, customer_id=${actorId || "guest"}, currency_code=${req.validatedBody.currency_code || "n/a"})`
     )
     throw error
   }

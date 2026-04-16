@@ -117,16 +117,21 @@ const config = defineConfig({
             id: "cod",
             options: {},
           },
-          // Stripe provider - temporarily disabled until properly configured
-          // Uncomment and configure when ready to use
-          // {
-          //   resolve: "@medusajs/medusa-payment-stripe",
-          //   id: "stripe",
-          //   options: {
-          //     apiKey: process.env.STRIPE_API_KEY,
-          //     webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-          //   },
-          // },
+          {
+            resolve: "./src/modules/qr-payment",
+            id: "qr",
+            options: {
+              qr_code_url: process.env.QR_CODE_URL,
+            },
+          },
+          {
+            resolve: "@medusajs/payment-stripe",
+            id: "stripe",
+            options: {
+              apiKey: process.env.STRIPE_API_KEY,
+              webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+            },
+          },
         ],
       },
     },

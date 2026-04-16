@@ -64,6 +64,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
   const storeModuleService = container.resolve(Modules.STORE);
 
   const countries = ["gb", "de", "dk", "se", "fr", "es", "it"];
+  const fallbackPaymentProviderIds = ["pp_system_default"];
+  const fallbackFulfillmentProviderId = "manual_manual";
 
   logger.info("Seeding store data...");
   const [store] = await storeModuleService.listStores();
@@ -110,6 +112,53 @@ export default async function seedDemoData({ container }: ExecArgs) {
       },
     },
   });
+  const { data: paymentProviders } = await query.graph({
+    entity: "payment_provider",
+    fields: ["id"],
+  });
+  const availablePaymentProviderIds = Array.isArray(paymentProviders)
+    ? paymentProviders
+        .map((provider) =>
+          provider && typeof provider === "object" && "id" in provider
+            ? String(provider.id)
+            : ""
+        )
+        .filter(Boolean)
+    : [];
+
+  const paymentProviderIdsForRegion = availablePaymentProviderIds.length
+    ? availablePaymentProviderIds
+    : fallbackPaymentProviderIds;
+
+  const { data: fulfillmentProviders } = await query.graph({
+    entity: "fulfillment_provider",
+    fields: ["id"],
+  });
+  const availableFulfillmentProviderIds = Array.isArray(fulfillmentProviders)
+    ? fulfillmentProviders
+        .map((provider) =>
+          provider && typeof provider === "object" && "id" in provider
+            ? String(provider.id)
+            : ""
+        )
+        .filter(Boolean)
+    : [];
+
+  const selectedFulfillmentProviderId =
+    availableFulfillmentProviderIds.find((id) =>
+      id.includes("inhouse-fulfillment")
+    ) ||
+    availableFulfillmentProviderIds.find((id) => id.includes("manual")) ||
+    availableFulfillmentProviderIds[0] ||
+    fallbackFulfillmentProviderId;
+
+  logger.info(
+    `Using payment providers for region: ${paymentProviderIdsForRegion.join(", ")}`
+  );
+  logger.info(
+    `Using fulfillment provider for shipping options: ${selectedFulfillmentProviderId}`
+  );
+
   logger.info("Seeding region data...");
   const { result: regionResult } = await createRegionsWorkflow(container).run({
     input: {
@@ -118,7 +167,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
           name: "Europe",
           currency_code: "eur",
           countries,
-          payment_providers: ["pp_system_default"],
+          payment_providers: paymentProviderIdsForRegion,
         },
       ],
     },
@@ -168,7 +217,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
       stock_location_id: stockLocation.id,
     },
     [Modules.FULFILLMENT]: {
-      fulfillment_provider_id: "manual_manual",
+      fulfillment_provider_id: selectedFulfillmentProviderId,
     },
   });
 
@@ -247,7 +296,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
       {
         name: "Standard Shipping",
         price_type: "flat",
-        provider_id: "manual_manual",
+        provider_id: selectedFulfillmentProviderId,
         service_zone_id: fulfillmentSet.service_zones[0].id,
         shipping_profile_id: shippingProfile.id,
         type: {
@@ -285,7 +334,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
       {
         name: "Express Shipping",
         price_type: "flat",
-        provider_id: "manual_manual",
+        provider_id: selectedFulfillmentProviderId,
         service_zone_id: fulfillmentSet.service_zones[0].id,
         shipping_profile_id: shippingProfile.id,
         type: {
