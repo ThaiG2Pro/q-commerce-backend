@@ -12,7 +12,7 @@ const config = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,
-    databaseDriverOptions: isProduction ? {
+    databaseDriverOptions: {
       connection: {
         ssl: {
           rejectUnauthorized: false,
@@ -25,7 +25,7 @@ const config = defineConfig({
         createTimeoutMillis: 300000,
         idleTimeoutMillis: 30000,
       },
-    } : {},
+    },
     http: {
       storeCors: process.env.STORE_CORS || "",
       adminCors: process.env.ADMIN_CORS || "",
@@ -152,6 +152,9 @@ const config = defineConfig({
           },
         ],
       },
+    },
+    {
+      resolve: "./src/modules/products-media",
     },
   ],
 })

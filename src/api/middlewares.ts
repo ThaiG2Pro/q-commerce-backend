@@ -3,7 +3,14 @@ import {
   defineMiddlewares,
   validateAndTransformBody,
 } from "@medusajs/framework/http"
-import { z } from "zod"
+import { z } from "@medusajs/framework/zod"
+import { 
+  CreateCategoryImagesSchema,
+} from "./admin/categories/[category_id]/images/route"
+import { 
+  UpdateCategoryImagesSchema,
+  DeleteCategoryImagesSchema,
+} from "./admin/categories/[category_id]/images/batch/route"
 
 const optionalNonEmptyString = z.preprocess(
   (value) => {
@@ -121,6 +128,26 @@ export default defineMiddlewares({
       matcher: "/store/customers",
       method: "POST",
       middlewares: [validateAndTransformBody(CreateStoreCustomerSchema)],
+    },
+    {
+      matcher: "/admin/categories/:category_id/images",
+      method: ["POST"],
+      middlewares: [
+        validateAndTransformBody(CreateCategoryImagesSchema),],
+    },
+    {
+      matcher: "/admin/categories/:category_id/images/batch",
+      method: ["POST"],
+      middlewares: [
+        validateAndTransformBody(UpdateCategoryImagesSchema),
+      ],
+    },
+    {
+      matcher: "/admin/categories/:category_id/images/batch",
+      method: ["DELETE"],
+      middlewares: [
+        validateAndTransformBody(DeleteCategoryImagesSchema),
+      ],
     },
 
     // Auth alias for Zalo mini app
