@@ -150,12 +150,7 @@ export default defineMiddlewares({
       ],
     },
 
-    // Auth alias for Zalo mini app
-    {
-      matcher: "/auth/zalo",
-      method: "POST",
-      middlewares: [validateAndTransformBody(AuthZaloSchema)],
-    },
+    // (Removed) Auth alias for Zalo mini app - use /auth/customer/zalo via SDK
     {
       matcher: "/store/orders",
       method: "GET",
