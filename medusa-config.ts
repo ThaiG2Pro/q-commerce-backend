@@ -20,7 +20,7 @@ const config = defineConfig({
       },
       pool: {
         min: 0,
-        max: 7,
+        max: 30,
         acquireTimeoutMillis: 300000,
         createTimeoutMillis: 300000,
         idleTimeoutMillis: 30000,
