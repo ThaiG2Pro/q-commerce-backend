@@ -567,50 +567,11 @@ const { cart } = await medusa.store.cart.update(cartId, {
 })
 ```
 
-### 8.4 Zalo Mini App Login Flow
-```typescript
-import jwtDecode from "jwt-decode"
+### 8.4 Zalo Mini App Login Flow (DEPRECATED)
 
-type MedusaCustomerTokenPayload = {
-  actor_id?: string
-}
+Zalo Mini App authentication has been removed from the active project configuration. Use the Email/Password (`emailpass`) flow described in **8.1–8.3** for registration and login.
 
-// 1) Get token from Zalo Mini App SDK
-const accessToken = await zmpSdk.getAccessToken()
-
-// 2) Authenticate with Medusa Zalo provider
-const { customer } = await medusa.auth.authenticate("customer", "zalo", {
-  access_token: accessToken,
-})
-
-let token = customer.token
-let payload = jwtDecode<MedusaCustomerTokenPayload>(token)
-
-// 3) New user: actor_id is empty -> create customer then refresh token
-if (!payload.actor_id) {
-  await medusa.store.customer.create({
-    email: `zalo_${Date.now()}@miniapp.local`,
-    first_name: "Zalo",
-    last_name: "User",
-  })
-
-  const refreshed = await fetch(`${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/auth/token/refresh`, {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((res) => res.json())
-
-  token = refreshed.customer.token
-  payload = jwtDecode<MedusaCustomerTokenPayload>(token)
-}
-
-// 4) Persist token and use it in next requests
-localStorage.setItem("medusa_token", token)
-```
-
-> Nếu team đang gọi REST trực tiếp thay vì SDK, backend cũng cung cấp alias `POST /auth/zalo` để đi qua cùng luồng Zalo auth hiện tại.
+The Zalo code samples are retained in the repo for historical reference only and should not be used in current client implementations.
 
 ---
 

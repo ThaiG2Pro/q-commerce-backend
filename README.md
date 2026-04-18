@@ -69,8 +69,10 @@ Dự án đã được tích hợp đầy đủ các payment và fulfillment pro
 
 ### Payment Providers
 - ✅ **COD (Cash on Delivery)** - Thanh toán khi nhận hàng
-- ✅ **ZaloPay** - Cổng thanh toán Việt Nam
-- 📦 **Stripe** - Thẻ quốc tế (code sẵn sàng, cần setup)
+- ✅ **Stripe** - Thẻ quốc tế (code sẵn sàng, cần setup)
+
+> NOTE: ZaloPay integration has been deprecated and removed from the active configuration.
+> If you need ZaloPay again, re-enable it in `medusa-config.ts` and set required env vars.
 
 ### Fulfillment Provider
 - ✅ **In-house Fulfillment** - Quản lý đội giao hàng nội bộ

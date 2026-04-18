@@ -1,13 +1,16 @@
 # Server Needs (for Client Team)
 
-## 1. Auth (Zalo Mini App)
+> DEPRECATED: Zalo authentication/mini-app integration has been removed from the active server configuration.
+> The Zalo-related sections below are kept for historical reference only and should not be relied on by the current client/server flow.
 
-- Endpoint login: `POST /auth/customer/zalo`
-- Body:
+## 1. Auth (Zalo Mini App) (DEPRECATED)
+
+- Endpoint login (removed): `POST /auth/customer/zalo`
+- Body (historical):
   ```json
   { "access_token": "<zalo_access_token>" }
   ```
-- Server tự tạo `appsecret_proof` và gọi Zalo Open API.
+-- Note: Zalo auth was removed. Use Email/Password (`emailpass`) for authentication.
 
 ### First login flow
 1. Gọi `POST /auth/customer/zalo`

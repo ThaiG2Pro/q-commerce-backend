@@ -20,40 +20,14 @@ Hệ thống Q-Commerce được xây dựng trên Medusa v2, tích hợp đầy
 
 ---
 
-## Zalo Authentication Flow
+## Zalo Authentication Flow (DEPRECATED)
 
-**Endpoint**: `POST /auth/customer/zalo`  
-**Compatibility alias**: `POST /auth/zalo`  
-**Request body**:
-```json
-{
-  "access_token": "token-from-zalo-miniapp"
-}
-```
+This project has removed active support for the Zalo Mini App authentication flow. The content below is preserved for historical context only — the current authentication provider is Email/Password (`emailpass`).
 
-**Luồng xử lý backend**:
-1. Nhận `access_token` từ frontend.
-2. Tạo `appsecret_proof = HMAC_SHA256(access_token, ZALO_APP_SECRET)`.
-3. Gọi Zalo Open API:
-   - URL: `https://graph.zalo.me/v2.0/me?fields=id,name,picture`
-   - Method: `GET`
-   - Headers: `access_token`, `appsecret_proof`
-4. Lấy profile (`id`, `name`, `picture`) và upsert `auth_identity` theo `zalo_id`.
-5. Trả JWT cho frontend.
+- Endpoint (removed): `POST /auth/customer/zalo` (alias `POST /auth/zalo`)
+- Environment variables `ZALO_APP_SECRET` and any `ZALOPAY_*` keys are deprecated and should be removed from production `.env` files.
 
-**Lưu ý backend hiện tại**:
-- Khi gọi `POST /store/customers` sau login Zalo, backend sẽ tự chuẩn hóa email placeholder (`guest@example.com`, `*@miniapp.local`) thành email ổn định theo `zalo_id` nếu có.
-- Nếu thiếu `first_name/last_name`, backend sẽ tự tách từ `name` trong `user_metadata` của Zalo identity.
-
-**Quy ước user mới**:
-- Nếu token decode có `actor_id` rỗng, frontend tiếp tục gọi:
-  - `POST /store/customers` (tạo customer)
-  - `POST /auth/token/refresh` (lấy token mới có `customer_id/actor_id`)
-
-**Environment Variables bắt buộc**:
-```bash
-ZALO_APP_SECRET=your-zalo-app-secret
-```
+If Zalo integration is required again in the future, restore the provider entry in `medusa-config.ts` and the route under `src/api/auth/zalo`.
 
 ### Validation Checklist (Zalo customer + cart diagnostics)
 

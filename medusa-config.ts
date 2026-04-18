@@ -34,7 +34,7 @@ const config = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
       authMethodsPerActor: {
         user: ["emailpass"],
-        customer: ["emailpass", "zalo"],
+        customer: ["emailpass"],
       },
     },
   },
@@ -86,13 +86,6 @@ const config = defineConfig({
             resolve: "@medusajs/medusa/auth-emailpass",
             id: "emailpass",
           },
-          {
-            resolve: "./src/modules/zalo-auth",
-            id: "zalo",
-            options: {
-              appSecret: process.env.ZALO_APP_SECRET,
-            },
-          },
         ],
       },
     },
@@ -102,16 +95,6 @@ const config = defineConfig({
       resolve: "@medusajs/medusa/payment",
       options: {
         providers: [
-          {
-            resolve: "./src/modules/zalo-payment",
-            id: "zalopay",
-            options: {
-              app_id: process.env.ZALOPAY_APP_ID,
-              key1: process.env.ZALOPAY_KEY1,
-              key2: process.env.ZALOPAY_KEY2,
-              is_sandbox: process.env.ZALOPAY_IS_SANDBOX === "true",
-            },
-          },
           {
             resolve: "./src/modules/cod-payment",
             id: "cod",

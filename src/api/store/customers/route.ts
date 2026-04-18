@@ -56,14 +56,7 @@ export async function POST(req: MedusaStoreRequest<PostStoreCustomersBody>, res:
   const customerData: PostStoreCustomersBody = {
     ...req.validatedBody,
   }
-
   const authIdentityId = authContext?.auth_identity_id
-  if (!authIdentityId) {
-    throw new MedusaError(
-      MedusaError.Types.UNAUTHORIZED,
-      "Authentication identity is required to create a customer."
-    )
-  }
 
   if (authIdentityId) {
     const authService = req.scope.resolve(Modules.AUTH)
