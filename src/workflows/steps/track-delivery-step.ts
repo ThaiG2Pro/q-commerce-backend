@@ -36,6 +36,7 @@ export const trackDeliveryStep = createStep(
     await analyticsModuleService.track({
       event: "fulfillment.delivered",
       actor_id: input.order_id,
+      timestamp: delivered?.toISOString() || shipped?.toISOString() || new Date().toISOString(),
       properties: {
         fulfillment_id: input.fulfillment_id,
         order_id: input.order_id,

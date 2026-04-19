@@ -21,6 +21,7 @@ export const trackCartCreatedStep = createStep(
     await analyticsModuleService.track({
       event: "cart.created",
       actor_id: input.customer_id,
+      timestamp: adjustedDate.toISOString(),
       properties: {
         cart_id: input.cart_id,
         currency_code: input.currency_code,

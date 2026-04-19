@@ -22,6 +22,7 @@ export const trackOrderPlacedStep = createStep(
     await analyticsModuleService.track({
       event: "order.placed",
       actor_id: input.customer_id,
+      timestamp: adjustedDate.toISOString(),
       properties: {
         order_id: input.order_id,
         total: input.total,
