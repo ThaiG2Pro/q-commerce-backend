@@ -1,16 +1,11 @@
-// src/subscribers/fulfillment-delivered.ts
+// src/subscribers/delivery-created.ts
 import type { SubscriberArgs, SubscriberConfig } from "@medusajs/framework"
-import { trackDeliveryWorkflow } from "../workflows/track-delivery"
+import { trackDeliveryWorkflow } from "../workflows/track-delivery-workflow"
 
-export default async function fulfillmentUpdatedHandler({
+export default async function deliveryCreatedHandler({
   event: { data },
   container,
-}: SubscriberArgs<any>) {
-  // Medusa sends fullness of the resource in data; check status for 'delivered'
-  const status = data?.status
-
-  if (status !== "delivered") return
-
+}: SubscriberArgs<{ id: string }>) {
   await trackDeliveryWorkflow(container).run({
     input: { id: data.id },
   })
