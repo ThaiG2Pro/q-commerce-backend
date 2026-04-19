@@ -1,4 +1,4 @@
-import { createCustomerAccountWorkflow } from "@medusajs/core-flows"
+import { createCustomerAccountWorkflow, createCustomersWorkflow } from "@medusajs/core-flows"
 import { MedusaResponse, MedusaStoreRequest } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, MedusaError, Modules } from "@medusajs/framework/utils"
 import { AuthIdentityDTO } from "@medusajs/framework/types"
@@ -80,22 +80,40 @@ export async function POST(req: MedusaStoreRequest<PostStoreCustomersBody>, res:
       customerData.first_name = customerData.first_name || parsedName.first_name
       customerData.last_name = customerData.last_name || parsedName.last_name
     }
+
+    const { result } = await createCustomerAccountWorkflow(req.scope).run({
+      input: {
+        customerData,
+        authIdentityId,
+      },
+    })
+
+    const customer = await refetchEntity(req, "customer", result.id)
+    if (!customer) {
+      throw new MedusaError(
+        MedusaError.Types.NOT_FOUND,
+        `Customer with id: ${result.id} was not found`
+      )
+    }
+
+    return res.status(200).json({ customer })
   }
 
-  const { result } = await createCustomerAccountWorkflow(req.scope).run({
+  // Create customer without auth identity
+  const { result: customers } = await createCustomersWorkflow(req.scope).run({
     input: {
-      customerData,
-      authIdentityId,
+      customersData: [customerData],
     },
   })
 
-  const customer = await refetchEntity(req, "customer", result.id)
-  if (!customer) {
+  const customer = customers[0]
+  const refetched = await refetchEntity(req, "customer", customer.id)
+  if (!refetched) {
     throw new MedusaError(
       MedusaError.Types.NOT_FOUND,
-      `Customer with id: ${result.id} was not found`
+      `Customer with id: ${customer.id} was not found`
     )
   }
 
-  res.status(200).json({ customer })
+  res.status(200).json({ customer: refetched })
 }
