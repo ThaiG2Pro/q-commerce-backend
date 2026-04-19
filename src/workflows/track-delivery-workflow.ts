@@ -19,6 +19,7 @@ export const trackDeliveryWorkflow = createWorkflow(
     const payload = transform({ fulfillment: fulfillments[0] }, ({ fulfillment }) => ({
       fulfillment_id: fulfillment.id,
       order_id: fulfillment.order?.id ?? (fulfillment as any).order_id,
+      customer_id: fulfillment.order?.customer?.id ?? fulfillment.order?.customer_id ?? undefined,
       shipped_at: String(fulfillment.shipped_at || fulfillment.created_at),
       delivered_at: String(fulfillment.updated_at),
       metadata: fulfillment.metadata,

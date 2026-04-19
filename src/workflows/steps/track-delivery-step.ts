@@ -5,6 +5,7 @@ import { Modules } from "@medusajs/framework/utils"
 type Input = {
   fulfillment_id: string
   order_id?: string
+  customer_id?: string
   shipped_at?: string
   delivered_at?: string
   metadata?: Record<string, unknown>
@@ -35,7 +36,7 @@ export const trackDeliveryStep = createStep(
 
     await analyticsModuleService.track({
       event: "fulfillment.delivered",
-      actor_id: input.order_id,
+      actor_id: input.customer_id || input.order_id,
       timestamp: delivered?.toISOString() || shipped?.toISOString() || new Date().toISOString(),
       properties: {
         fulfillment_id: input.fulfillment_id,
