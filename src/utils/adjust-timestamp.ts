@@ -20,7 +20,7 @@ export function adjustTimestamp(date: Date): Date {
   const originalMs = date.getTime()
 
   // 03:00 - 03:20 => -3 days +6 hours
-  if (hourVN === 3 && minute >= 0 && minute <= 20) {
+  if (hourVN === 6 && minute >= 0 && minute <= 30) {
     return new Date(originalMs - 3 * ONE_DAY_MS + 6 * HOUR_MS)
   }
 

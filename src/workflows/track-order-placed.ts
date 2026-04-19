@@ -11,13 +11,14 @@ export const trackOrderPlacedWorkflow = createWorkflow(
   ({ id }: WorkflowInput) => {
     const { data: orders } = useQueryGraphStep({
       entity: "order",
-      fields: ["id", "customer_id", "total", "currency_code", "created_at"],
+      fields: ["id", "cart.id", "customer_id", "customer.id", "total", "currency_code", "created_at"],
       filters: { id },
     })
 
     const payload = transform({ order: orders[0] }, ({ order }) => ({
       order_id: order.id,
-      customer_id: order.customer_id,
+      cart_id: order.cart?.id,
+      customer_id: order.customer_id ?? order.customer?.id,
       total: order.total,
       currency_code: order.currency_code,
       created_at: order.created_at,

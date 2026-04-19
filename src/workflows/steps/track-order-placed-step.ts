@@ -5,6 +5,7 @@ import { adjustTimestamp } from "../../utils/adjust-timestamp"
 
 type Input = {
   order_id: string
+  cart_id?: string
   customer_id?: string
   total?: number
   currency_code?: string
@@ -25,6 +26,8 @@ export const trackOrderPlacedStep = createStep(
       timestamp: adjustedDate.toISOString(),
       properties: {
         order_id: input.order_id,
+        cart_id: input.cart_id,
+        customer_id: input.customer_id,
         total: input.total,
         currency_code: input.currency_code,
         created_at: adjustedDate.toISOString(),

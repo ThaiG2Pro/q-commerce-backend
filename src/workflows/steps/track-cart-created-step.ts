@@ -24,6 +24,7 @@ export const trackCartCreatedStep = createStep(
       timestamp: adjustedDate.toISOString(),
       properties: {
         cart_id: input.cart_id,
+        customer_id: input.customer_id,
         currency_code: input.currency_code,
         created_at: adjustedDate.toISOString(),
         original_created_at: originalDate.toISOString(),
