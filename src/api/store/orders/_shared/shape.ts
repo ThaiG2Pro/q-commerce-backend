@@ -25,11 +25,14 @@ export function normalizeOrder(raw: unknown): NormalizedOrder {
   const order = asObject(raw) ?? {}
   const items = Array.isArray(order.items) ? order.items : []
 
+  const createdAt = order.created_at != null ? String(order.created_at) : null
+  const totalNum = (typeof order.total === "number" && Number.isFinite(order.total)) ? order.total : Number(order.total) || 0
+
   return {
     id: asString(order.id) ?? "",
     items,
-    total: asNumber(order.total),
-    created_at: asString(order.created_at),
+    total: totalNum,
+    created_at: createdAt,
     payment_status: asString(order.payment_status),
     fulfillment_status: asString(order.fulfillment_status),
   }

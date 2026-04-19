@@ -150,16 +150,5 @@ export default defineMiddlewares({
       ],
     },
 
-    // (Removed) Auth alias for Zalo mini app - use /auth/customer/zalo via SDK
-    {
-      matcher: "/store/orders",
-      method: "GET",
-      middlewares: [authenticate("customer", ["session", "bearer"])],
-    },
-    {
-      matcher: "/store/orders/:id",
-      method: "GET",
-      middlewares: [authenticate("customer", ["session", "bearer"])],
-    },
   ],
 })
