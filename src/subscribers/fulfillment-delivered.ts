@@ -17,5 +17,5 @@ export default async function fulfillmentUpdatedHandler({
 }
 
 export const config: SubscriberConfig = {
-  event: "fulfillment.updated",
+  event: "delivery.created",
 }
