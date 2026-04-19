@@ -12,18 +12,19 @@ export const trackDeliveryWorkflow = createWorkflow(
     const { data: fulfillments } = useQueryGraphStep({
       entity: "fulfillment",
       // request fields that are commonly available; adjust if your schema differs
-      fields: ["id", "order_id", "shipped_at", "created_at", "metadata", "updated_at"],
+      fields: ["id", "order", "shipped_at", "created_at", "metadata", "updated_at"],
       filters: { id },
     })
 
     const payload = transform({ fulfillment: fulfillments[0] }, ({ fulfillment }) => ({
       fulfillment_id: fulfillment.id,
-      order_id: fulfillment.order_id,
-      shipped_at: fulfillment.shipped_at || fulfillment.created_at,
-      delivered_at: fulfillment.updated_at,
+      order_id: fulfillment.order?.id ?? (fulfillment as any).order_id,
+      shipped_at: String(fulfillment.shipped_at || fulfillment.created_at),
+      delivered_at: String(fulfillment.updated_at),
       metadata: fulfillment.metadata,
     }))
 
-    trackDeliveryStep(payload)
+    // cast to any to satisfy workflow type constraints
+    trackDeliveryStep(payload as any)
   }
 )
