@@ -29,7 +29,7 @@ const trackCheckoutSuccessStep = createStep(
         customer_id: order.customer_id,
         items_count: order.items?.length,
       },
-    })
+    } as any)
   }
 )
 

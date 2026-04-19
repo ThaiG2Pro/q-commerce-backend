@@ -30,6 +30,6 @@ export const trackOrderPlacedStep = createStep(
         created_at: adjustedDate.toISOString(),
         original_created_at: originalDate.toISOString(),
       },
-    })
+    } as any)
   }
 )

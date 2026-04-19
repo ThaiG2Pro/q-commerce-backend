@@ -47,6 +47,6 @@ export const trackDeliveryStep = createStep(
         delivered_at: delivered?.toISOString(),
         metadata: input.metadata || {},
       },
-    })
+    } as any)
   }
 )
