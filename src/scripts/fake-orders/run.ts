@@ -42,7 +42,10 @@ async function main() {
     process.exit(1)
   }
 
-  const sdk = new Medusa({ baseUrl })
+  const sdk = new Medusa({
+    baseUrl,
+    publishableKey: process.env.MEDUSA_PUBLISHABLE_KEY || (config as any).publishableKey,
+  })
 
   let success = 0
   let failed = 0
@@ -51,7 +54,7 @@ async function main() {
     try {
       const accountIdx = i % accounts
       const email = `fake+${Date.now()}_${i}_${accountIdx}@example.com`
-      const password = config.defaultPassword || "password"
+      const password = (config as any).defaultPassword || (config as any).fixedPassword || process.env.FAKE_CUSTOMER_PASSWORD || "password"
 
       // register customer
       try {
@@ -81,19 +84,39 @@ async function main() {
       const cart = (cartCreate as any).cart
       if (!cart?.id) throw new Error("Failed to create cart")
 
-      // add a random variant
-      const variant = pickRandom(variantsPool)
-      const quantity = variant.quantity ?? 1
-      await sdk.client.fetch(`/store/carts/${cart.id}/line-items`, {
-        method: "POST",
-        body: {
-          variant_id: variant.variant_id,
-          quantity,
-        },
-      })
+      // add a random variant with retry on inventory errors
+      const maxAttempts = variantsPool.length
+      let added = false
+      let lastAddError: any = null
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const variant = variantsPool[(i + attempt) % variantsPool.length]
+        const quantity = variant.quantity ?? 1
+        try {
+          await sdk.client.fetch(`/store/carts/${cart.id}/line-items`, {
+            method: "POST",
+            body: {
+              variant_id: variant.variant_id,
+              quantity,
+            },
+          })
+          added = true
+          break
+        } catch (err: any) {
+          lastAddError = err
+          const msg = err?.message || String(err)
+          if (!/inventory/i.test(msg)) {
+            // non-inventory error -> rethrow
+            throw err
+          }
+          // otherwise try next variant
+        }
+      }
+      if (!added) {
+        throw lastAddError || new Error("Failed to add any variant due to inventory")
+      }
 
       // set shipping + billing addresses and customer email
-      const address = config.defaultAddress
+      const address = (config as any).defaultAddress || (config as any).shippingAddress || (config as any).billingAddress
       if (address) {
         await sdk.client.fetch(`/store/carts/${cart.id}`, {
           method: "POST",
