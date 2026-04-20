@@ -47,6 +47,36 @@ async function main() {
     publishableKey: process.env.MEDUSA_PUBLISHABLE_KEY || (config as any).publishableKey,
   })
 
+  // Validate variants against store and keep only those that exist + whose product is published (best-effort)
+  const validatedVariants: { variant_id: string; quantity?: number }[] = []
+  for (const v of variantsPool) {
+    try {
+      const vResp = await sdk.client.fetch(`/store/variants/${v.variant_id}`, { method: "GET" })
+      const vData = (vResp as any).variant || (vResp as any)
+      const productId = vData?.product_id || vData?.product?.id || vData?.product?.product_id
+      let prodOk = true
+      if (productId) {
+        try {
+          const pResp = await sdk.client.fetch(`/store/products/${productId}`, { method: "GET" })
+          const pData = (pResp as any).product || (pResp as any)
+          const status = pData?.status
+          prodOk = !status || status === "published"
+        } catch (e) {
+          prodOk = false
+        }
+      }
+      if (vData && prodOk) {
+        validatedVariants.push(v)
+      }
+    } catch (e) {
+      // skip invalid variant
+    }
+  }
+  if (!validatedVariants.length) {
+    console.error("No valid variants found after validation. Check variants.template.json or publish products.")
+    process.exit(1)
+  }
+
   let success = 0
   let failed = 0
 
@@ -76,6 +106,15 @@ async function main() {
         // login may redirect; ignore and continue as anonymous cart if needed
       }
 
+      // ensure we have current customer (session may not be established if auth redirected)
+      let currentCustomer: any = null
+      try {
+        const me = await sdk.client.fetch("/store/customers/me", { method: "GET" })
+        currentCustomer = (me as any).customer || (me as any)
+      } catch (e) {
+        currentCustomer = null
+      }
+
       // create cart
       const cartCreate = await sdk.client.fetch("/store/carts", {
         method: "POST",
@@ -84,12 +123,12 @@ async function main() {
       const cart = (cartCreate as any).cart
       if (!cart?.id) throw new Error("Failed to create cart")
 
-      // add a random variant with retry on inventory errors
-      const maxAttempts = variantsPool.length
+      // add a random variant with retry on inventory errors (use validatedVariants)
+      const maxAttempts = validatedVariants.length
       let added = false
       let lastAddError: any = null
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        const variant = variantsPool[(i + attempt) % variantsPool.length]
+        const variant = validatedVariants[(i + attempt) % validatedVariants.length]
         const quantity = variant.quantity ?? 1
         try {
           await sdk.client.fetch(`/store/carts/${cart.id}/line-items`, {
