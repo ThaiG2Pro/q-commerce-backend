@@ -1,0 +1,5 @@
+[
+  { "variant_id": "variant_1", "quantity": 1 },
+  { "variant_id": "variant_2", "quantity": 1 },
+  { "variant_id": "variant_3", "quantity": 2 }
+]

@@ -1,0 +1,406 @@
+Product Id,Product Handle,Product Title,Product Subtitle,Product Status,Product External Id,Product Description,Product Is Giftcard,Product Discountable,Product Thumbnail,Product Collection Id,Product Type Id,Product Weight,Product Length,Product Height,Product Width,Product Hs Code,Product Origin Country,Product Mid Code,Product Material,Product Created At,Product Updated At,Product Deleted At,Product Tag 1,Product Tag 2,Product Sales Channel 1,Variant Id,Variant Title,Variant Sku,Variant Barcode,Variant Ean,Variant Upc,Variant Allow Backorder,Variant Manage Inventory,Variant Hs Code,Variant Origin Country,Variant Mid Code,Variant Material,Variant Weight,Variant Length,Variant Height,Variant Width,Variant Metadata,Variant Variant Rank,Variant Thumbnail,Variant Product Id,Variant Created At,Variant Updated At,Variant Deleted At,Variant Price VND,Variant Option 1 Name,Variant Option 1 Value,Product Tag 3
+prod_01KNSKJMTJQ8P4FSX0NFEVJQM4,sample,Sample,sample,draft,,1 sample cho 1 đơn,false,true,,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,,,,,,,,,Fri Apr 10 2026 00:10:29 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:54:38 GMT+0700 (Indochina Time),,SaleSậpSàn,ĂnVặt,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KNSKJP44AJMB9MAYDSPJ4K09,Default variant,SAMPLE_01,,,,true,true,,,,,,,,,,0,,prod_01KNSKJMTJQ8P4FSX0NFEVJQM4,Fri Apr 10 2026 00:10:31 GMT+0700 (Indochina Time),Fri Apr 10 2026 00:10:31 GMT+0700 (Indochina Time),,21000,Variant,default,
+prod_01KNSKJMTJQ8P4FSX0NFEVJQM4,sample,Sample,sample,draft,,1 sample cho 1 đơn,false,true,,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,,,,,,,,,Fri Apr 10 2026 00:10:29 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:54:38 GMT+0700 (Indochina Time),,SaleSậpSàn,ĂnVặt,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KNSN9K16NT135NND2VJWDD5S,Combo 2 sample,COM_SAMPLE_02,,,,false,true,,,,,,,,,,0,,prod_01KNSKJMTJQ8P4FSX0NFEVJQM4,Fri Apr 10 2026 00:40:30 GMT+0700 (Indochina Time),Fri Apr 10 2026 00:40:30 GMT+0700 (Indochina Time),,36000,Variant,combo2,
+prod_01KPFCJZTG0M3888NMT5CKYZC7,mi-handy-hao-hao-tom-chua-cay,Mì Handy Hảo Hảo Tôm Chua Cay,Acecook,published,,"Tên sản phẩm: Mì Handy Hảo Hảo Tôm Chua Cay
+
+Thương hiệu: Acecook
+
+Danh mục: Mì ly
+
+Giới thiệu:
+
+- Thiết kế dạng ly tiện dụng, phù hợp cho người bận rộn.
+
+- Giữ nguyên hương vị tôm chua cay truyền thống của Hảo Hảo.
+
+- Đi kèm rau củ sấy khô phong phú bên trong.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/mi-handy-hao-hao-tom-chua-cay.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,67,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SVG3BB960ZNV3DTWS8,Ly,ACE-HDHH-TCC,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTG0M3888NMT5CKYZC7,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,12400,Ly,1,Spicy
+prod_01KPFCJZTG0M3888NMT5CKYZC7,mi-handy-hao-hao-tom-chua-cay,Mì Handy Hảo Hảo Tôm Chua Cay,Acecook,published,,"Tên sản phẩm: Mì Handy Hảo Hảo Tôm Chua Cay
+
+Thương hiệu: Acecook
+
+Danh mục: Mì ly
+
+Giới thiệu:
+
+- Thiết kế dạng ly tiện dụng, phù hợp cho người bận rộn.
+
+- Giữ nguyên hương vị tôm chua cay truyền thống của Hảo Hảo.
+
+- Đi kèm rau củ sấy khô phong phú bên trong.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/mi-handy-hao-hao-tom-chua-cay.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,67,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPK723AG9JTQF06ZA319Y4J8,Combo 5 ly,ACE-HDHH-TCC-5,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTG0M3888NMT5CKYZC7,Sun Apr 19 2026 22:52:00 GMT+0700 (Indochina Time),Sun Apr 19 2026 22:52:00 GMT+0700 (Indochina Time),,42000,Ly,Combo,Spicy
+prod_01KPFCJZTH04WB8265B7PF6JXN,sua-tuoi-cghl-it-duong-loc4,Sữa tươi CGHL ít đường,Cô Gái Hà Lan,published,,"Tên sản phẩm: Sữa tươi CGHL ít đường
+
+Thương hiệu: Cô Gái Hà Lan (Dutch Lady)
+
+Danh mục: Sữa tươi
+
+Giới thiệu:
+
+- Công thức chuẩn Hà Lan với hàm lượng đường giảm nhẹ.
+
+- Bổ sung canxi, protein và các khoáng chất cần thiết.
+
+- Hương vị thơm béo, dễ uống cho cả người lớn và trẻ em.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/sua-tuoi-cghl-it-duong-loc4.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSAVD07R2AWZB6GTESQWGPQ,180,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SXCC35VYN3PWA2VKVX,Lốc,CGHL-STID,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTH04WB8265B7PF6JXN,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,44667,Lốc,1,Healthy
+prod_01KPFCJZTH25D0962ZZC2TKJM1,sua-chua-uong-th-true-yogurt-viet-quat-loc,Sữa chua uống TH True Yogurt Việt Quất,TH True Milk,published,,"Tên sản phẩm: Sữa chua uống TH True Yogurt Việt Quất
+
+Thương hiệu: TH True Milk
+
+Danh mục: Sữa chua uống
+
+Giới thiệu:
+
+- Làm từ sữa tươi sạch nguyên chất của trang trại TH.
+
+- Kết hợp nước ép việt quất tự nhiên, giàu vitamin.
+
+- Hỗ trợ hệ tiêu hóa và tăng cường sức đề kháng.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/sua-chua-uong-th-true-yogurt-viet-quat-loc.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSAVD07R2AWZB6GTESQWGPQ,180,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SW2BQ1Y1M38R6FZ12D,Lốc,TH-SCU-VQ,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTH25D0962ZZC2TKJM1,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,43333,Lốc,1,Healthy
+prod_01KPFCJZTH4YVZ4QVF4D389DDE,pho-tron-de-nhat-bo,Phở Trộn Đệ Nhất Bò,Acecook,published,,"Tên sản phẩm: Phở Trộn Đệ Nhất Bò
+
+Thương hiệu: Acecook
+
+Danh mục: Phở ăn liền
+
+Giới thiệu:
+
+- Sợi phở mềm dai kết hợp cùng sốt trộn bò đậm đà.
+
+- Mang đến hương vị phở truyền thống theo phong cách trộn hiện đại.
+
+- Tiết kiệm thời gian chế biến mà vẫn đảm bảo dinh dưỡng.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/pho-tron-de-nhat-bo.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,84,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SWWQ57YEK2XD0NA9ZA,Gói,ACE-PT-BO,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTH4YVZ4QVF4D389DDE,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,13200,Gói,1,Healthy
+prod_01KPFCJZTH56PAKD8XTXY47EYY,sua-hat-vinamilk-9-loai-hat-it-duong,Sữa hạt Vinamilk 9 loại hạt ít đường,Vinamilk,published,,"Tên sản phẩm: Sữa hạt Vinamilk 9 loại hạt ít đường
+
+Thương hiệu: Vinamilk
+
+Danh mục: Sữa hạt
+
+Giới thiệu:
+
+- Sự kết hợp dinh dưỡng từ 9 loại hạt quý (óc chó, hạnh nhân...).
+
+- Vị ngọt thanh từ hạt, ít đường, tốt cho tim mạch và vóc dáng.
+
+- Sản phẩm phù hợp cho người ăn chay hoặc đang ăn kiêng.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/sua-hat-vinamilk-9-loai-hat-it-duong.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSAVD07R2AWZB6GTESQWGPQ,180,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SX3Z9ZC3C96KSQFGGE,Hộp,VNM-SH9-1L,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTH56PAKD8XTXY47EYY,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,70667,Hộp,1,Healthy
+prod_01KPFCJZTH5MNEYGF6PM8WB53F,chao-gau-do-thit-bam,Cháo Gấu Đỏ Thịt Băm,Gấu đỏ,published,,"Tên sản phẩm: Cháo Gấu Đỏ Thịt Băm
+
+Thương hiệu: Gấu Đỏ
+
+Danh mục: Cháo ăn liền
+
+Giới thiệu:
+
+- Hạt cháo dẻo thơm làm từ gạo nàng thơm chợ Đào.
+
+- Gói thịt băm thật, gia vị đậm đà, bổ sung vitamin nhóm B.
+
+- Phù hợp làm bữa sáng nhẹ nhàng hoặc bữa phụ cho gia đình.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/chao-gau-do-thit-bam.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,50,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SW592Y2KZKC4F04B9D,Gói,GD-CHAO-TB,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTH5MNEYGF6PM8WB53F,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,5333,Gói,1,Spicy
+prod_01KPFCJZTHAVKTPHRX59451NW8,sua-chua-uong-th-true-yogurt-huong-cam,Sữa chua uống TH True Yogurt hương Cam,TH True Milk,published,,"Tên sản phẩm: Sữa chua uống TH True Yogurt hương Cam
+
+Thương hiệu: TH True Milk
+
+Danh mục: Sữa chua uống
+
+Giới thiệu:
+
+- Vị cam chua ngọt sảng khoái, kích thích vị giác.
+
+- Không sử dụng chất bảo quản, an toàn cho sức khỏe.
+
+- Cung cấp năng lượng và dưỡng chất thiết yếu mỗi ngày.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/sua-chua-uong-th-true-yogurt-huong-cam.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSAVD07R2AWZB6GTESQWGPQ,110,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SWQCYTX77MDRF1E9EP,Lốc,TH-SCU-CAM,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTHAVKTPHRX59451NW8,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,43333,Lốc,1,Healthy
+prod_01KPFCJZTHMAYMJYZW82H46SRF,sua-tuoi-tiet-trung-dalatmilk-vi-tu-nhien,Sữa tươi tiệt trùng Dalatmilk vị tự nhiên,Dalatmilk,published,,"Tên sản phẩm: Sữa tươi tiệt trùng Dalatmilk vị tự nhiên
+
+Thương hiệu: Dalatmilk
+
+Danh mục: Sữa tươi
+
+Giới thiệu:
+
+- Nguồn sữa từ cao nguyên Đà Lạt tươi mát.
+
+- Vị sữa thanh nhẹ, giữ trọn vẹn dưỡng chất tự nhiên.
+
+- Quy trình tiệt trùng khép kín, đảm bảo vệ sinh an toàn.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/sua-tuoi-tiet-trung-dalatmilk-vi-tu-nhien.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSAVD07R2AWZB6GTESQWGPQ,180,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SXSD7FH4PV291TGD8K,Hộp,DM-STTT-1L,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTHMAYMJYZW82H46SRF,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,48000,Hộp,1,Healthy
+prod_01KPFCJZTHZDQAYXDQNWC2TTHA,ca-hop-ba-co-gai-nap-giut,Cá hộp Ba Cô Gái nắp giật,Ba Cô Gái,published,,"Tên sản phẩm: Cá hộp Ba Cô Gái nắp giật
+
+Thương hiệu: Ba Cô Gái
+
+Danh mục: Thực phẩm đóng hộp
+
+Giới thiệu:
+
+- Cá nục tươi ngon sốt cà chua đậm đặc.
+
+- Thiết kế nắp giật thông minh, mở dễ dàng không cần dụng cụ.
+
+- Thích hợp ăn kèm với cơm, bánh mì hoặc chế biến các món xào.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/ca-hop-ba-co-gai-nap-giut.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,155,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SWGH28CV5JPGG1NBEF,Hộp,BCG-CA-NG,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTHZDQAYXDQNWC2TTHA,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,26000,Hộp,1,Spicy
+prod_01KPFCJZTJ23ZMWD5ESPQCXZQP,dau-goi-head-shoulders-bang-lanh,Dầu gội Head & Shoulders Băng Lạnh,P&G,published,,"Tên sản phẩm: Dầu gội Head & Shoulders Băng Lạnh
+
+Thương hiệu: P&G
+
+Danh mục: Chăm sóc tóc
+
+Giới thiệu:
+
+- Công thức bạc hà mát rượi, sảng khoái da đầu tức thì.
+
+- Đặc trị gàu, ngăn ngừa ngứa và bết dầu hiệu quả.
+
+- Phù hợp cho những ai vận động nhiều hoặc da đầu nóng ẩm.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/dau-goi-head-shoulders-bang-lanh.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,550,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SZN8NHX17NHEQMK298,Chai,HS-DG-BL,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJ23ZMWD5ESPQCXZQP,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,190000,Chai,1,VệSinh
+prod_01KPFCJZTJ5QPW0Z63KNKCX7PE,banh-oreo-vi-kem-vani,Bánh Oreo vị Kem Vani,Oreo,published,,"Tên sản phẩm: Bánh Oreo vị Kem Vani
+
+Thương hiệu: Oreo
+
+Danh mục: Bánh kẹo
+
+Giới thiệu:
+
+- Hai lớp bánh quy socola giòn rụm kẹp nhân kem vani ngọt ngào.
+
+- ""Xoay bánh, liếm kem, chấm sữa"" - cách thưởng thức kinh điển.
+
+- Món ăn nhẹ hoàn hảo cho mọi lứa tuổi.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/banh-oreo-vi-kem-vani.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,119,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T0HHD8J8Z9YJZVSHH2,Thanh,OR-BN-VN,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJ5QPW0Z63KNKCX7PE,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,23333,Thanh,1,ĂnVặt
+prod_01KPFCJZTJ6159T7MM61RV6ZSR,keo-dynamite-bac-ha-nhan-socola,Kẹo Dynamite Bạc hà nhân Socola,Dynamite,published,,"Tên sản phẩm: Kẹo Dynamite Bạc hà nhân Socola
+
+Thương hiệu: Dynamite
+
+Danh mục: Bánh kẹo
+
+Giới thiệu:
+
+- Lớp vỏ bạc hà the mát bên ngoài, nhân socola đậm đà bên trong.
+
+- Tạo cảm giác bùng nổ hương vị ngay khi thưởng thức.
+
+- Là lựa chọn yêu thích để tỉnh táo và thư giãn.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/keo-dynamite-bac-ha-nhan-socola.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,120,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T021946BV73H74Q1KG,Gói,DN-KDM-BH,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJ6159T7MM61RV6ZSR,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,40000,Gói,1,ĂnVặt
+prod_01KPFCJZTJ69AQ3F5WX9HFAY46,nuoc-ngot-lon-mirinda-xa-xi-sleek,Nước ngọt lon Mirinda Xá Xị,Mirinda,published,,"Tên sản phẩm: Nước ngọt lon Mirinda Xá Xị
+
+Thương hiệu: Mirinda
+
+Danh mục: Nước giải khát
+
+Giới thiệu:
+
+- Hương xá xị nồng nàn, độc đáo và đầy sảng khoái.
+
+- Độ gas mạnh giúp xua tan cơn khát tức thì.
+
+- Là thức uống lý tưởng cho các buổi tiệc và liên hoan.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/nuoc-ngot-lon-mirinda-xa-xi-sleek.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSAVD07R2AWZB6GTESQWGPQ,330,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SYEHDQG7Y3GS3WXK32,Lon,MR-XX-330ML,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJ69AQ3F5WX9HFAY46,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,14000,Lon,1,GiaiKhat
+prod_01KPFCJZTJ7TAF437REV48SQ7B,ban-chai-danh-rang-close-up-precision,Bàn chải đánh răng Close Up Precision,Close Up,published,,"Tên sản phẩm: Bàn chải đánh răng Close Up Precision
+
+Thương hiệu: Close Up
+
+Danh mục: Chăm sóc răng miệng
+
+Giới thiệu:
+
+- Lông bàn chải siêu mảnh, len lỏi sâu vào các kẽ răng.
+
+- Cán cầm chắc chắn, thiết kế hiện đại, dễ thao tác.
+
+- Giúp làm sạch răng miệng hiệu quả mà không gây tổn thương nướu.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/ban-chai-danh-rang-close-up-precision.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,150,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SZDSME8XBMGN19QRHE,Cái,CU-BC-PR,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJ7TAF437REV48SQ7B,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,33333,Cái,1,VệSinh
+prod_01KPFCJZTJE4VZ22NATAHD7XNX,keo-mem-sugus-trai-cay-tui,Kẹo mềm Sugus trái cây,Sugus,published,,"Tên sản phẩm: Kẹo mềm Sugus trái cây
+
+Thương hiệu: Sugus
+
+Danh mục: Bánh kẹo
+
+Giới thiệu:
+
+- Viên kẹo mềm dẻo với nhiều hương vị trái cây phong phú.
+
+- Vị chua ngọt hài hòa, hấp dẫn cả người lớn và trẻ nhỏ.
+
+- Đóng gói từng viên tiện dụng cho việc chia sẻ và bảo quản.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/keo-mem-sugus-trai-cay-tui.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,210,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T0AX20EGBBFD6DAK3E,Túi,SG-KM-TC,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJE4VZ22NATAHD7XNX,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,73333,Túi,1,ĂnVặt
+prod_01KPFCJZTJE61FDVJA7MHJHMNT,ban-chai-ps-khang-khuan-charcoal,Bàn chải P/S kháng khuẩn Charcoal,P/S,published,,"Tên sản phẩm: Bàn chải P/S kháng khuẩn Charcoal
+
+Thương hiệu: P/S
+
+Danh mục: Chăm sóc răng miệng
+
+Giới thiệu:
+
+- Lông bàn chải phủ tinh thể than hoạt tính giúp kháng khuẩn 99%.
+
+- Thiết kế đầu bàn chải linh hoạt, dễ dàng làm sạch mặt trong.
+
+- Hỗ trợ làm trắng răng và khử mùi hôi miệng tự nhiên.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/ban-chai-ps-khang-khuan-charcoal.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,150,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SZJJRRMDFP4ZGKQDVA,Cái,PS-BC-CC,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJE61FDVJA7MHJHMNT,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,33333,Cái,1,VệSinh
+prod_01KPFCJZTJH06ZVQKEFF93Z5XR,kem-danh-rang-colgate-ngua-sau-rang,Kem đánh răng Colgate Ngừa Sâu Răng,Colgate,published,,"Tên sản phẩm: Kem đánh răng Colgate Ngừa Sâu Răng
+
+Thương hiệu: Colgate
+
+Danh mục: Chăm sóc răng miệng
+
+Giới thiệu:
+
+- Chứa Canxi và Fluoride bảo vệ men răng vượt trội.
+
+- Ngăn ngừa sâu răng hiệu quả và củng cố nướu khỏe mạnh.
+
+- Hương bạc hà nhẹ nhàng, sạch sâu trong từng kẽ răng.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/kem-danh-rang-colgate-ngua-sau-rang.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,100,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SY0NZ3EQSETD4N0H1F,Tuýp,CG-KDR-NSR,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJH06ZVQKEFF93Z5XR,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,16667,Tuýp,1,VệSinh
+prod_01KPFCJZTJR0TF7XY84S1CFVDR,sua-dau-nanh-fami-loc-6,Sữa đậu nành Fami,Fami,published,,"Tên sản phẩm: Sữa đậu nành Fami
+
+Thương hiệu: Fami
+
+Danh mục: Sữa đậu nành
+
+Giới thiệu:
+
+- Chiết xuất từ 100% đậu nành chọn lọc, không biến đổi gen.
+
+- Cung cấp đạm thực vật và canxi cho xương chắc khỏe.
+
+- Thức uống quen thuộc, thơm ngon cho mọi gia đình Việt.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/sua-dau-nanh-fami-loc-6.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSAVD07R2AWZB6GTESQWGPQ,200,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SXKG3S0H32HMDCV68D,Lốc,FAMI-SDN-200ML,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJR0TF7XY84S1CFVDR,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,38667,Lốc,1,Healthy
+prod_01KPFCJZTJSXDBV212Z7XW8TE2,nuoc-ngot-lon-pepsi-cola-sleek,Nước ngọt lon Pepsi Cola,Pepsi,published,,"Tên sản phẩm: Nước ngọt lon Pepsi Cola
+
+Thương hiệu: Pepsi
+
+Danh mục: Nước giải khát
+
+Giới thiệu:
+
+- Hương vị Cola truyền thống mạnh mẽ, đầy phấn khích.
+
+- Giúp tiêu hóa tốt hơn sau bữa ăn đầy dầu mỡ.
+
+- Đóng lon tiện dụng, dễ dàng mang theo khi đi dã ngoại.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/nuoc-ngot-lon-pepsi-cola-sleek.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSAVD07R2AWZB6GTESQWGPQ,330,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SYZ4R6BQJC78FAA4WK,Lon,PS-CL-330ML,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJSXDBV212Z7XW8TE2,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,14133,Lon,1,GiaiKhat
+prod_01KPFCJZTJWM1QN20MH0YMTB6N,dau-goi-clear-mat-lanh-bac-ha,Dầu gội Clear mát lạnh Bạc Hà,Unilever,published,,"Tên sản phẩm: Dầu gội Clear mát lạnh Bạc Hà
+
+Thương hiệu: Unilever
+
+Danh mục: Chăm sóc tóc
+
+Giới thiệu:
+
+- Công nghệ sạch gàu 3 tác động độc quyền của Clear.
+
+- Cảm giác mát lạnh cực hạn, đánh bay bụi bẩn và dầu thừa.
+
+- Nuôi dưỡng da đầu khỏe mạnh từ sâu bên trong.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/dau-goi-clear-mat-lanh-bac-ha.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,700,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SZJNVV2SGP10VZB91H,Chai,CL-DG-BH,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJWM1QN20MH0YMTB6N,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,200333,Chai,1,VệSinh
+prod_01KPFCJZTJXPY87YAE3QV2ER45,kem-danh-rang-close-up-dau-quat-thao,Kem đánh răng Close Up Dầu Quất Thảo,Close Up,published,,"Tên sản phẩm: Kem đánh răng Close Up Dầu Quất Thảo
+
+Thương hiệu: Close Up
+
+Danh mục: Chăm sóc răng miệng
+
+Giới thiệu:
+
+- Sự kết hợp giữa tinh dầu thảo dược và quất thơm mát.
+
+- Loại bỏ mảng bám, giúp răng trắng sáng tự nhiên.
+
+- Mang lại hơi thở thơm mát cực đỉnh suốt nhiều giờ.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/kem-danh-rang-close-up-dau-quat-thao.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,180,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0SY7JG4MEFYRN7DHVR7,Tuýp,CU-KDR-DQT,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTJXPY87YAE3QV2ER45,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,46667,Tuýp,1,VệSinh
+prod_01KPFCJZTK2NWWGV48Y134XWQ9,bang-keo-giay-trang-nd-48f,Băng keo giấy trắng,NÐ,published,,"Tên sản phẩm: Băng keo giấy trắng
+
+Thương hiệu: Việt Nam
+
+Danh mục: Văn phòng phẩm
+
+Giới thiệu:
+
+- Độ dính tốt trên bề mặt giấy, gỗ và các vật dụng văn phòng.
+
+- Có thể ghi chú trực tiếp lên bề mặt băng keo dễ dàng.
+
+- Dễ xé bằng tay, không để lại vết keo khi bóc ra.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/bang-keo-giay-trang-nd-48f.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,1,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T2WVMNTJKAR153968G,Cuộn,ND-BKG-48F,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTK2NWWGV48Y134XWQ9,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,20000,Cuộn,1,Backtoschool
+prod_01KPFCJZTK7F00DCMA2YJA07Z8,snack-ostar-kimchi,Snack Ostar Kimchi,Orion,published,,"Tên sản phẩm: Snack Ostar Kimchi
+
+Thương hiệu: Orion
+
+Danh mục: Bánh kẹo
+
+Giới thiệu:
+
+- Miếng khoai tây lát mỏng giòn rụm từ khoai tây tươi.
+
+- Tẩm ướp hương vị Kimchi Hàn Quốc chua cay đặc trưng.
+
+- Không chứa chất bảo quản, an toàn cho người sử dụng.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/snack-ostar-kimchi.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,55,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T1XRYQ8S5ZW5ECX59A,Gói,ON-SN-KC,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTK7F00DCMA2YJA07Z8,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,16000,Gói,1,ĂnVặt
+prod_01KPFCJZTKF6TCVZ5YZGE7CQWM,ngoi-chi-kim-hong-ha-07-hb,Ngòi chì kim Hồng Hà 0.7 HB,H?ng Hà,published,,"Tên sản phẩm: Ngòi chì kim Hồng Hà 0.7 HB
+
+Thương hiệu: Hồng Hà
+
+Danh mục: Văn phòng phẩm
+
+Giới thiệu:
+
+- Chì 0.7mm cho nét vẽ chắc chắn, khó gãy.
+
+- Độ đậm HB tiêu chuẩn, phù hợp cho học tập và ghi chép.
+
+- Đựng trong hộp nhựa tiện lợi, dễ dàng lấy và bảo quản.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/ngoi-chi-kim-hong-ha-07-hb.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,20,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T1DQTNXCNVTFP48NZ4,Vỉ,HH-NCK-07HB,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTKF6TCVZ5YZGE7CQWM,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,12000,Vỉ,1,Backtoschool
+prod_01KPFCJZTKNND2HKS6THDCKNGV,giay-note-duckey-5x3-dk-nt-173,Giấy Note Duckey 5x3,Duckey,published,,"Tên sản phẩm: Giấy Note Duckey 5x3
+
+Thương hiệu: Duckey
+
+Danh mục: Văn phòng phẩm
+
+Giới thiệu:
+
+- Kích thước 5x3 inch nhỏ gọn, màu sắc nổi bật dễ chú ý.
+
+- Lớp keo dính bền bỉ, có thể dán lại nhiều lần.
+
+- Công cụ hỗ trợ ghi nhớ công việc và học tập hiệu quả.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/giay-note-duckey-5x3-dk-nt-173.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,100,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T2PPZY907GXJNMP5R8,Xấp,DK-GN-53,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTKNND2HKS6THDCKNGV,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,13333,Xấp,1,Backtoschool
+prod_01KPFCJZTKPWB3J4P1K4489V9E,bo-but-long-mau-acrylic-tl-colokit,Bộ bút lông màu Acrylic TL Colokit,Thiên Long,published,,"Tên sản phẩm: Bộ bút lông màu Acrylic TL Colokit
+
+Thương hiệu: Thiên Long
+
+Danh mục: Văn phòng phẩm
+
+Giới thiệu:
+
+- Màu sắc tươi sáng, độ phủ cao, nhanh khô trên nhiều bề mặt.
+
+- Chất liệu an toàn, không độc hại cho trẻ em sáng tạo.
+
+- Đầu bút lông mềm mại, dễ dàng vẽ và tô màu chuyên nghiệp.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/bo-but-long-mau-acrylic-tl-colokit.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,12,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T1GVTF8AN7VW124DY5,Bộ,TL-BLM-ACL,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTKPWB3J4P1K4489V9E,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,84000,Bộ,1,Backtoschool
+prod_01KPFCJZTKQZ6ZYMZ3ZTMVQMTY,snack-swing-ny-steak,Snack Swing NY Steak,Orion,published,,"Tên sản phẩm: Snack Swing NY Steak
+
+Thương hiệu: Orion
+
+Danh mục: Bánh kẹo
+
+Giới thiệu:
+
+- Khoai tây lát dạng sóng dày dặn, giòn tan.
+
+- Hương vị bò bít tết New York đậm đà, thơm lừng.
+
+- Trải nghiệm ẩm thực cao cấp trong từng miếng snack.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/snack-swing-ny-steak.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,63,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T1FRJKY79JQT9A1F7T,Gói,ON-SN-STK,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTKQZ6ZYMZ3ZTMVQMTY,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,18667,Gói,1,ĂnVặt
+prod_01KPFCJZTKS6NJPZSHEXQXVJNQ,snack-oishi-nhan-socola,Snack Oishi nhân Socola,Oishi,published,,"Tên sản phẩm: Snack Oishi nhân Socola
+
+Thương hiệu: Oishi
+
+Danh mục: Bánh kẹo
+
+Giới thiệu:
+
+- Lớp vỏ bánh giòn xốp bọc lấy nhân socola tan chảy bên trong.
+
+- Vị ngọt thơm, kích thích vị giác ngay miếng đầu tiên.
+
+- Gói nhỏ tiện lợi, thích hợp mang theo khi đi học, đi chơi.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/snack-oishi-nhan-socola.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBDZ9XRM34GKM7ZNS0Q660,100,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T104SBBW322KP9YYNT,Gói,OI-SN-SC,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTKS6NJPZSHEXQXVJNQ,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,20000,Gói,1,ĂnVặt
+prod_01KPFCJZTKTEB5G5KH4BFJQ07E,vo-hong-ha-5-o-ly-96-trang,Vở Hồng Hà 5 ô ly 96 trang,H?ng Hà,published,,"Tên sản phẩm: Vở Hồng Hà 5 ô ly 96 trang
+
+Thương hiệu: Hồng Hà
+
+Danh mục: Văn phòng phẩm
+
+Giới thiệu:
+
+- Giấy trắng mịn, độ dày cao, chống thấm nhòe mực tốt.
+
+- Dòng kẻ 5 ô ly sắc nét, hỗ trợ rèn chữ đẹp cho học sinh.
+
+- Bìa vở thiết kế sinh động, độ bền cao khi sử dụng lâu dài.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/vo-hong-ha-5-o-ly-96-trang.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,96,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPFCK0T2FAVZKJ0ZFV38RDHA,Cuốn,HH-V5OL-96T,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTKTEB5G5KH4BFJQ07E,Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:39 GMT+0700 (Indochina Time),,6667,Cuốn,1,Backtoschool
+prod_01KPFCJZTKTEB5G5KH4BFJQ07E,vo-hong-ha-5-o-ly-96-trang,Vở Hồng Hà 5 ô ly 96 trang,H?ng Hà,published,,"Tên sản phẩm: Vở Hồng Hà 5 ô ly 96 trang
+
+Thương hiệu: Hồng Hà
+
+Danh mục: Văn phòng phẩm
+
+Giới thiệu:
+
+- Giấy trắng mịn, độ dày cao, chống thấm nhòe mực tốt.
+
+- Dòng kẻ 5 ô ly sắc nét, hỗ trợ rèn chữ đẹp cho học sinh.
+
+- Bìa vở thiết kế sinh động, độ bền cao khi sử dụng lâu dài.",false,true,https://res.cloudinary.com/doj3fpuqb/image/upload/vo-hong-ha-5-o-ly-96-trang.webp,pcol_01KNSPMGP6D1Y6TAVKPQ20BKBJ,ptyp_01KNSBEC6Q1MD78ZX841694Q0V,96,,,,,,,,Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),Sat Apr 18 2026 11:11:38 GMT+0700 (Indochina Time),,SaleSậpSàn,HàngMới,sc_01KMSB1VK25AT0Q21TMV1837JC,variant_01KPK76DAA64TTVAQMQAWP4TT9,Combo Quay về trường học,BTS-2026,,,,false,true,,,,,,,,,,0,,prod_01KPFCJZTKTEB5G5KH4BFJQ07E,Sun Apr 19 2026 22:54:21 GMT+0700 (Indochina Time),Sun Apr 19 2026 22:54:21 GMT+0700 (Indochina Time),,100000,Cuốn,ComboBackToSchool,Backtoschool

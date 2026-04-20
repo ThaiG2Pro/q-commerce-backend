@@ -14,7 +14,6 @@ export const trackDeliveryWorkflow = createWorkflow(
       fields: [
         "id",
         "order_id",
-        "order.id",
         "order.customer_id",
         "order.customer.id",
         "shipped_at",
@@ -25,14 +24,22 @@ export const trackDeliveryWorkflow = createWorkflow(
       filters: { id },
     })
 
-    const payload = transform({ fulfillment: fulfillments[0] }, ({ fulfillment }) => ({
-      fulfillment_id: fulfillment.id,
-      order_id: fulfillment.order?.id ?? fulfillment.order_id,
-      customer_id: fulfillment.order?.customer?.id ?? fulfillment.order?.customer_id ?? undefined,
-      shipped_at: String(fulfillment.shipped_at || fulfillment.created_at),
-      delivered_at: String(fulfillment.updated_at),
-      metadata: fulfillment.metadata,
-    }))
+    const payload = transform({ fulfillment: fulfillments[0] }, ({ fulfillment }) => {
+      // Ép kiểu sang any để truy cập các trường join từ Query Graph
+      const f = fulfillment as any; 
+      const order = f.order;
+
+      return {
+        fulfillment_id: f.id,
+        // Chỉ lấy từ order object, vì f.order_id không tồn tại
+        order_id: order?.id, 
+        // Lấy customer_id từ order
+        customer_id: order?.customer?.id ?? order?.customer_id,
+        shipped_at: String(f.shipped_at || f.created_at),
+        delivered_at: String(f.updated_at),
+        metadata: f.metadata,
+      }
+    })
 
     // cast to any to satisfy workflow type constraints
     trackDeliveryStep(payload as any)
