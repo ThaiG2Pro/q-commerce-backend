@@ -15,7 +15,7 @@
   "scripts": {
     "build": "medusa build",
     "seed": "medusa exec ./src/scripts/seed.ts",
-    "fake:orders": "ts-node ./src/scripts/fake-orders/run.ts",
+    "fake:orders": "medusa exec ./src/scripts/fake-orders/run.ts --",
     "start": "medusa start",
     "dev": "medusa develop",
     "test:integration:http": "TEST_TYPE=integration:http NODE_OPTIONS=--experimental-vm-modules jest --silent=false --runInBand --forceExit",
@@ -25,6 +25,8 @@
   "dependencies": {
     "@medusajs/admin-sdk": "2.13.5",
     "@medusajs/admin-shared": "2.13.5",
+    "@medusajs/analytics-posthog": "2.13.5",
+    "@medusajs/caching-redis": "2.13.5",
     "@medusajs/cli": "2.13.5",
     "@medusajs/core-flows": "2.13.5",
     "@medusajs/dashboard": "2.13.5",
@@ -34,7 +36,6 @@
     "@medusajs/icons": "2.13.5",
     "@medusajs/js-sdk": "2.13.5",
     "@medusajs/medusa": "2.13.5",
-    "@medusajs/payment-stripe": "2.13.5",
     "@medusajs/ui": "4.1.5",
     "@tanstack/react-query": "5.64.2",
     "axios": "^1.14.0",

@@ -1,7 +1,17 @@
-import Medusa from "@medusajs/js-sdk"
+import { ExecArgs } from "@medusajs/framework/types"
+import { Modules } from "@medusajs/framework/utils"
 import fs from "fs"
 import path from "path"
 import config from "./config.template"
+import {
+  buildCustomerCreated,
+  buildCartCreated,
+  buildOrderPlaced,
+  buildFulfillmentDelivered,
+  EXPECTED_DELIVERY_MINUTES,
+} from "../../analytics"
+
+// --- CLI arg helpers ---
 
 function parseArg(name: string): string | undefined {
   const prefix = `--${name}=`
@@ -9,217 +19,317 @@ function parseArg(name: string): string | undefined {
   return arg ? arg.slice(prefix.length) : undefined
 }
 
-function parseIntArg(name: string, defaultValue: number) {
+function intArg(name: string, def: number): number {
   const v = parseArg(name)
-  return v ? parseInt(v, 10) : defaultValue
+  return v ? parseInt(v, 10) : def
 }
 
-function parseBool(raw: string | undefined, defaultValue = false) {
-  if (raw === undefined) return defaultValue
-  return raw.toLowerCase() !== "false"
-}
-
-function pickRandom<T>(arr: T[]) {
+function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 
-async function main() {
-  const baseUrl = process.env.MEDUSA_BACKEND_URL || config.baseUrl
-  const orders = parseIntArg("orders", parseInt(process.env.FAKE_ORDERS || "1"))
-  const accounts = parseIntArg("accounts", parseInt(process.env.FAKE_ACCOUNTS || String(orders)))
-  const cartOnly = parseBool(parseArg("cartOnly"), false)
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 
+// --- HTTP helpers ---
+
+const PK = config.publishableKey
+
+async function apiFetch(baseUrl: string, path: string, opts: { method?: string; body?: any; token?: string } = {}) {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "x-publishable-api-key": PK,
+  }
+  if (opts.token) headers["Authorization"] = `Bearer ${opts.token}`
+
+  const res = await fetch(`${baseUrl}${path}`, {
+    method: opts.method || "GET",
+    headers,
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  })
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`${opts.method || "GET"} ${path}: ${res.status} ${text.slice(0, 200)}`)
+  }
+  return res.json()
+}
+
+async function adminLogin(baseUrl: string): Promise<string> {
+  const data = await apiFetch(baseUrl, "/auth/user/emailpass", {
+    method: "POST",
+    body: { email: "thai@q-com.com", password: "supersecret" },
+  })
+  return data.token
+}
+
+// --- Main ---
+
+export default async function fakeOrders({ container }: ExecArgs) {
+  const baseUrl = config.baseUrl
+  const orderCount = intArg("orders", config.orderCount)
+  const cartOnlyRate = intArg("cart-only-rate", 0)
+  const ontimeRate = intArg("ontime-rate", 85)
+  const expectMinutes = intArg("expect-minutes", EXPECTED_DELIVERY_MINUTES)
+
+  // Load variants
   const variantsPath = path.resolve(__dirname, "variants.template.json")
   if (!fs.existsSync(variantsPath)) {
-    console.error("variants.template.json not found in script folder")
-    process.exit(1)
+    console.error("variants.template.json not found")
+    return
   }
-
-  const variantsRaw = fs.readFileSync(variantsPath, "utf-8")
-  const variantsPool: { variant_id: string; quantity?: number }[] = JSON.parse(variantsRaw)
+  const variantsPool: { variant_id: string; quantity?: number }[] = JSON.parse(
+    fs.readFileSync(variantsPath, "utf-8")
+  )
   if (!variantsPool.length) {
     console.error("variants.template.json is empty")
-    process.exit(1)
+    return
   }
 
-  const sdk = new Medusa({
-    baseUrl,
-    publishableKey: process.env.MEDUSA_PUBLISHABLE_KEY || (config as any).publishableKey,
-  })
+  const analytics = container.resolve(Modules.ANALYTICS)
+  const adminToken = await adminLogin(baseUrl)
 
-  // Validate variants against store and keep only those that exist + whose product is published (best-effort)
-  const validatedVariants: { variant_id: string; quantity?: number }[] = []
-  for (const v of variantsPool) {
-    try {
-      const vResp = await sdk.client.fetch(`/store/variants/${v.variant_id}`, { method: "GET" })
-      const vData = (vResp as any).variant || (vResp as any)
-      const productId = vData?.product_id || vData?.product?.id || vData?.product?.product_id
-      let prodOk = true
-      if (productId) {
-        try {
-          const pResp = await sdk.client.fetch(`/store/products/${productId}`, { method: "GET" })
-          const pData = (pResp as any).product || (pResp as any)
-          const status = pData?.status
-          prodOk = !status || status === "published"
-        } catch (e) {
-          prodOk = false
-        }
-      }
-      if (vData && prodOk) {
-        validatedVariants.push(v)
-      }
-    } catch (e) {
-      // skip invalid variant
+  // Validate variants against published products
+  const knownVariantIds = new Set<string>()
+  let offset = 0
+  const limit = 100
+  while (true) {
+    const res = await apiFetch(baseUrl, `/store/products?limit=${limit}&offset=${offset}&fields=variants.id`)
+    const products = (res as any).products || []
+    for (const p of products) {
+      for (const v of p.variants || []) knownVariantIds.add(v.id)
     }
+    if (products.length < limit) break
+    offset += limit
   }
-  if (!validatedVariants.length) {
-    console.error("No valid variants found after validation. Check variants.template.json or publish products.")
-    process.exit(1)
+
+  const validVariants = variantsPool.filter((v) => knownVariantIds.has(v.variant_id))
+  if (!validVariants.length) {
+    console.error("No valid variants found")
+    return
   }
+  console.log(`Validated ${validVariants.length}/${variantsPool.length} variants`)
 
   let success = 0
   let failed = 0
 
-  for (let i = 0; i < orders; i++) {
+  for (let i = 0; i < orderCount; i++) {
+    const email = `fake+${Date.now()}_${i}@example.com`
+    const password = config.fixedPassword
+
     try {
-      const accountIdx = i % accounts
-      const email = `fake+${Date.now()}_${i}_${accountIdx}@example.com`
-      const password = (config as any).defaultPassword || (config as any).fixedPassword || process.env.FAKE_CUSTOMER_PASSWORD || "password"
-
-      // register customer
-      try {
-        await sdk.client.fetch("/auth/customer/emailpass/register", {
-          method: "POST",
-          body: {
-            email,
-            password,
-          },
-        })
-      } catch (e) {
-        // ignore if already exists or registration blocked
-      }
-
-      // login customer to create a store session
-      try {
-        await sdk.auth.login("user", "emailpass", { email, password })
-      } catch (e) {
-        // login may redirect; ignore and continue as anonymous cart if needed
-      }
-
-      // ensure we have current customer (session may not be established if auth redirected)
-      let currentCustomer: any = null
-      try {
-        const me = await sdk.client.fetch("/store/customers/me", { method: "GET" })
-        currentCustomer = (me as any).customer || (me as any)
-      } catch (e) {
-        currentCustomer = null
-      }
-
-      // create cart
-      const cartCreate = await sdk.client.fetch("/store/carts", {
+      // 1. Register → get token (actor_id empty)
+      const regData = await apiFetch(baseUrl, "/auth/customer/emailpass/register", {
         method: "POST",
+        body: { email, password },
+      })
+      const regToken = regData.token
+
+      // Create customer profile → get customer_id
+      const custData = await apiFetch(baseUrl, "/store/customers", {
+        method: "POST",
+        token: regToken,
+        body: { email },
+      })
+      const customerId = custData.customer?.id
+      if (!customerId) throw new Error("Failed to create customer")
+
+      // Login again → token now has correct actor_id
+      const loginData = await apiFetch(baseUrl, "/auth/customer/emailpass", {
+        method: "POST",
+        body: { email, password },
+      })
+      const token = loginData.token
+
+      // Track: customer.created
+      await analytics.track(
+        buildCustomerCreated({
+          customer_id: customerId,
+          email,
+          source: "script",
+          is_simulated: true,
+        }) as any
+      )
+
+      // 2. Create cart (authenticated → cart gets customer_id)
+      const cartData = await apiFetch(baseUrl, "/store/carts", {
+        method: "POST",
+        token,
         body: {},
       })
-      const cart = (cartCreate as any).cart
+      const cart = cartData.cart
       if (!cart?.id) throw new Error("Failed to create cart")
 
-      // add a random variant with retry on inventory errors (use validatedVariants)
-      const maxAttempts = validatedVariants.length
-      let added = false
-      let lastAddError: any = null
-      for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        const variant = validatedVariants[(i + attempt) % validatedVariants.length]
-        const quantity = variant.quantity ?? 1
-        try {
-          await sdk.client.fetch(`/store/carts/${cart.id}/line-items`, {
-            method: "POST",
-            body: {
-              variant_id: variant.variant_id,
-              quantity,
-            },
-          })
-          added = true
-          break
-        } catch (err: any) {
-          lastAddError = err
-          const msg = err?.message || String(err)
-          if (!/inventory/i.test(msg)) {
-            // non-inventory error -> rethrow
-            throw err
-          }
-          // otherwise try next variant
-        }
-      }
-      if (!added) {
-        throw lastAddError || new Error("Failed to add any variant due to inventory")
+      // Add item
+      const variant = pickRandom(validVariants)
+      await apiFetch(baseUrl, `/store/carts/${cart.id}/line-items`, {
+        method: "POST",
+        token,
+        body: { variant_id: variant.variant_id, quantity: variant.quantity ?? 1 },
+      })
+
+      // Set address + email
+      await apiFetch(baseUrl, `/store/carts/${cart.id}`, {
+        method: "POST",
+        token,
+        body: {
+          email,
+          shipping_address: config.shippingAddress,
+          billing_address: config.billingAddress,
+        },
+      })
+
+      // Track: cart.created
+      await analytics.track(
+        buildCartCreated({
+          customer_id: customerId,
+          email,
+          cart_id: cart.id,
+          currency_code: cart.currency_code,
+          source: "script",
+          is_simulated: true,
+        }) as any
+      )
+
+      // Decide: cart-only (abandoned) or full flow
+      const isCartOnly = Math.random() * 100 < cartOnlyRate
+      if (isCartOnly) {
+        console.log(`[OK] #${i + 1} email=${email} cart=${cart.id} CART-ONLY (abandoned)`)
+        success++
+        continue
       }
 
-      // set shipping + billing addresses and customer email
-      const address = (config as any).defaultAddress || (config as any).shippingAddress || (config as any).billingAddress
-      if (address) {
-        await sdk.client.fetch(`/store/carts/${cart.id}`, {
+      // 3. Add shipping method
+      try {
+        const soRes = await apiFetch(baseUrl, `/store/shipping-options?cart_id=${cart.id}`, { token })
+        const options = (soRes as any).shipping_options || []
+        const chosen = options.find((s: any) => s.name === config.shippingOptionName) || options[0]
+        if (chosen) {
+          await apiFetch(baseUrl, `/store/carts/${cart.id}/shipping-methods`, {
+            method: "POST",
+            token,
+            body: { option_id: chosen.id },
+          })
+        }
+      } catch {
+        // ignore
+      }
+
+      // 4. Init payment collection + COD session
+      const payColRes = await apiFetch(baseUrl, "/store/payment-collections", {
+        method: "POST",
+        token,
+        body: { cart_id: cart.id },
+      })
+      const payColId = payColRes.payment_collection?.id
+      if (payColId) {
+        await apiFetch(baseUrl, `/store/payment-collections/${payColId}/payment-sessions`, {
           method: "POST",
-          body: {
-            email,
-            shipping_address: address,
-            billing_address: address,
-          },
+          token,
+          body: { provider_id: config.paymentProviderId },
         })
       }
 
-      if (!cartOnly) {
-        // try to list shipping options and add one by name
-        try {
-          const soResp = await sdk.client.fetch(`/store/shipping-options?cart_id=${cart.id}`, {
-            method: "GET",
-          })
-          const shippingOptions = (soResp as any).shipping_options || []
-          const chosen = shippingOptions.find((s: any) => s.name === config.shippingOptionName) || shippingOptions[0]
-          if (chosen) {
-            await sdk.client.fetch(`/store/carts/${cart.id}/shipping-methods`, {
-              method: "POST",
-              body: { option_id: chosen.id },
-            })
-          }
-        } catch (e) {
-          // ignore
-        }
+      // 5. Complete cart → place order
+      const completeRes = await apiFetch(baseUrl, `/store/carts/${cart.id}/complete`, {
+        method: "POST",
+        token,
+        body: {},
+      })
+      const order = (completeRes as any).order
+      if (!order?.id) throw new Error("Failed to complete cart")
 
-        // try to initiate payment session for configured provider (best-effort)
-        try {
-          await sdk.client.fetch(`/store/payment-collections`, {
-            method: "POST",
-            body: {},
-          })
-        } catch (e) {
-          // ignore
-        }
+      // Track: order.placed
+      await analytics.track(
+        buildOrderPlaced({
+          customer_id: customerId,
+          email,
+          order_id: order.id,
+          cart_id: cart.id,
+          total: order.total,
+          currency_code: order.currency_code,
+          items_count: order.items?.length,
+          source: "script",
+          is_simulated: true,
+        }) as any
+      )
 
-        // try to complete cart
-        try {
-          await sdk.client.fetch(`/store/carts/${cart.id}/complete`, {
-            method: "POST",
-            body: {},
-          })
-        } catch (e) {
-          // completing may fail (inventory/payment) - still count as partial success
-        }
+      // 6. Admin: create fulfillment — use items from complete response
+      const fulfillmentItems = (order.items || []).map((item: any) => ({
+        id: item.id,
+        quantity: item.quantity,
+      }))
+
+      let locationId: string | undefined
+      try {
+        const locRes = await apiFetch(baseUrl, "/admin/stock-locations?limit=1", { token: adminToken })
+        locationId = locRes.stock_locations?.[0]?.id
+      } catch {
+        // ignore
+      }
+      if (!locationId) {
+        console.log(`[WARN] No stock location, skipping fulfillment for order ${order.id}`)
+        success++
+        continue
       }
 
-      console.log(`[OK] created order/cart for ${email} cart=${cart.id}`)
-      success += 1
-    } catch (err) {
-      failed += 1
-      console.log(`[FAIL] index=${i} error=${err instanceof Error ? err.message : String(err)}`)
+      await apiFetch(baseUrl, `/admin/orders/${order.id}/fulfillments`, {
+        method: "POST",
+        token: adminToken,
+        body: { location_id: locationId, items: fulfillmentItems },
+      })
+
+      // Get fulfillment ID
+      const updatedOrder = await apiFetch(baseUrl, `/admin/orders/${order.id}?fields=fulfillments.*`, { token: adminToken })
+      const fulfillments = updatedOrder.order?.fulfillments || []
+      const fulfillment = fulfillments[fulfillments.length - 1]
+      if (!fulfillment?.id) throw new Error("No fulfillment found")
+
+      // 6. Mark shipped
+      await apiFetch(baseUrl, `/admin/orders/${order.id}/fulfillments/${fulfillment.id}/shipments`, {
+        method: "POST",
+        token: adminToken,
+        body: { items: fulfillmentItems },
+      })
+
+      // 7. Mark delivered
+      await apiFetch(baseUrl, `/admin/orders/${order.id}/fulfillments/${fulfillment.id}/mark-as-delivered`, {
+        method: "POST",
+        token: adminToken,
+        body: {},
+      })
+
+      // 8. Track: fulfillment.delivered
+      const isOnTime = Math.random() * 100 < ontimeRate
+      const actualMinutes = isOnTime ? randomInt(8, 18) : randomInt(22, 35)
+
+      await analytics.track(
+        buildFulfillmentDelivered({
+          customer_id: customerId,
+          email,
+          order_id: order.id,
+          fulfillment_id: fulfillment.id,
+          expected_delivery_minutes: expectMinutes,
+          actual_delivery_minutes: actualMinutes,
+          source: "script",
+          is_simulated: true,
+        }) as any
+      )
+
+      console.log(
+        `[OK] #${i + 1} email=${email} order=${order.id} delivery=${actualMinutes}min ${isOnTime ? "ON-TIME" : "LATE"}`
+      )
+      success++
+    } catch (err: any) {
+      failed++
+      console.log(`[FAIL] #${i + 1} email=${email} error=${err.message}`)
     }
   }
 
-  console.log("\n=== Summary ===")
+  console.log(`\n=== Summary ===`)
   console.log(`success: ${success}`)
   console.log(`failed: ${failed}`)
+  console.log(`cart-only-rate target: ${cartOnlyRate}%`)
+  console.log(`ontime-rate target: ${ontimeRate}%`)
+  console.log(`expect-minutes: ${expectMinutes}`)
 }
-
-main().catch((err) => {
-  console.error(err)
-  process.exit(1)
-})
