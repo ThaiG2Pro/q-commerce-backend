@@ -67,6 +67,21 @@ const config = defineConfig({
         },
       },
       {
+	resolve: "@medusajs/medusa/locking",
+	options: {
+	  providers: [
+	    {
+	      resolve: "@medusajs/medusa/locking-redis",
+	      id: "locking-redis",
+              is_default: true,
+	      options: {
+	        redisUrl: process.env.REDIS_URL,
+	      },
+	    },
+	  ],
+ 	},
+      },
+      {
         resolve: "@medusajs/medusa/workflow-engine-redis",
         options: {
           redis: {
@@ -75,7 +90,7 @@ const config = defineConfig({
         },
       },
     ] : []),
-
+	
     // Auth Module
     {
       resolve: "@medusajs/medusa/auth",
@@ -148,6 +163,7 @@ const config = defineConfig({
       },
     },
   ],
+  featureFlags: {    caching: true,  },
 })
 
 export default config

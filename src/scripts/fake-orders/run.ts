@@ -56,9 +56,12 @@ async function apiFetch(baseUrl: string, path: string, opts: { method?: string; 
 }
 
 async function adminLogin(baseUrl: string): Promise<string> {
+  const email = process.env.FAKE_ORDERS_ADMIN_EMAIL || "thai@q-com.com"
+  const password = process.env.FAKE_ORDERS_ADMIN_PASSWORD || "supersecret"
+  
   const data = await apiFetch(baseUrl, "/auth/user/emailpass", {
     method: "POST",
-    body: { email: "thai@q-com.com", password: "supersecret" },
+    body: { email, password },
   })
   return data.token
 }
@@ -66,32 +69,37 @@ async function adminLogin(baseUrl: string): Promise<string> {
 // --- Main ---
 
 export default async function fakeOrders({ container }: ExecArgs) {
-  const baseUrl = config.baseUrl
+  const baseUrl = process.env.MEDUSA_BACKEND_URL || config.baseUrl
   const orderCount = intArg("orders", config.orderCount)
-  const cartOnlyRate = intArg("cart-only-rate", 0)
-  const ontimeRate = intArg("ontime-rate", 85)
+  const abandonedCount = intArg("abandoned", 0)
+  const lateCount = intArg("late", 0)
   const expectMinutes = intArg("expect-minutes", EXPECTED_DELIVERY_MINUTES)
   const backDay = intArg("back_day", 0)
+  const spread = intArg("spread", 0)
+  const trend = parseArg("trend") || "none"
   const backOffsetMs = Math.max(0, backDay) * 24 * 60 * 60 * 1000
-  // abandoned: exact number of carts to leave abandoned; if provided, takes precedence over cart-only-rate
-  const abandonedRaw = parseArg("abandoned")
-  const abandoned = typeof abandonedRaw !== "undefined" ? Math.max(0, parseInt(abandonedRaw, 10)) : undefined
-  let abandonedIndices: Set<number> | undefined
-  if (typeof abandoned !== "undefined") {
-    if (abandoned > orderCount) {
-      console.error("abandoned cannot be greater than orders")
-      return
-    }
-    abandonedIndices = new Set()
-    while (abandonedIndices.size < abandoned) {
-      abandonedIndices.add(Math.floor(Math.random() * orderCount))
-    }
-    console.log(`Forcing ${abandoned} abandoned cart(s) at indices: ${[...abandonedIndices].join(",")}`)
+
+  if (abandonedCount + lateCount > orderCount) {
+    console.error("Total abandoned and late orders cannot exceed total orders")
+    return
   }
 
-  // Timestamp ordering controls
-  const tsStepMs = intArg("ts-step-ms", (config as any).tsStepMs ?? 50)
-  const tsJitterMs = intArg("ts-jitter-ms", (config as any).tsJitterMs ?? 50)
+  const abandonedIndices = new Set<number>()
+  while (abandonedIndices.size < abandonedCount) {
+    abandonedIndices.add(Math.floor(Math.random() * orderCount))
+  }
+
+  const lateIndices = new Set<number>()
+  while (lateIndices.size < lateCount) {
+    const randIndex = Math.floor(Math.random() * orderCount)
+    if (!abandonedIndices.has(randIndex)) {
+      lateIndices.add(randIndex)
+    }
+  }
+
+  if (abandonedCount > 0) console.log(`Targeting ${abandonedCount} abandoned cart(s) at indices: ${[...abandonedIndices].join(",")}`)
+  if (lateCount > 0) console.log(`Targeting ${lateCount} late delivery(ies) at indices: ${[...lateIndices].join(",")}`)
+  console.log(`Time window: back_day=${backDay}, spread=${spread}, trend=${trend}`)
 
   // Load variants
   const variantsPath = path.resolve(__dirname, "variants.template.json")
@@ -134,17 +142,30 @@ export default async function fakeOrders({ container }: ExecArgs) {
   let success = 0
   let failed = 0
 
-  for (let i = 0; i < orderCount; i++) {
-    const nowMs = Date.now()
-    const perOrderJitter = tsJitterMs > 0 ? Math.floor(Math.random() * tsJitterMs) : 0
-    const baseMs = nowMs - backOffsetMs - perOrderJitter
+  const nowMs = Date.now()
+  const anchorMs = nowMs - backOffsetMs
+  const spreadMs = Math.max(0, spread) * 24 * 60 * 60 * 1000
 
-    const step = Math.max(1, tsStepMs)
-    // Ensure strict ordering: customer < cart < order < fulfillment
+  for (let i = 0; i < orderCount; i++) {
+    // 1. Distribution Logic
+    const progress = orderCount > 1 ? i / (orderCount - 1) : 1
+    let weight = progress
+    if (trend === "up") weight = Math.pow(progress, 2)
+    else if (trend === "down") weight = 1 - Math.pow(1 - progress, 2)
+
+    // Jitter to make it look human
+    const baseJitterMs = randomInt(-10, 10) * 60000 
+    const baseMs = anchorMs + (spreadMs * weight) + baseJitterMs
+
+    // 2. Early delivery calculation for timestamp consistency
+    const isOnTime = !lateIndices.has(i)
+    const actualMinutes = isOnTime ? randomInt(8, 18) : randomInt(22, 35)
+
+    // 3. Sequential timestamps with realistic minute-based gaps
     const tsCustomer = new Date(baseMs)
-    const tsCart = new Date(baseMs + step)
-    const tsOrder = new Date(baseMs + step * 2 + Math.floor(Math.random() * Math.min(10, step)))
-    const tsFulfillment = new Date(baseMs + step * 3 + Math.floor(Math.random() * Math.min(10, step)))
+    const tsCart = new Date(tsCustomer.getTime() + randomInt(1, 5) * 60000)
+    const tsOrder = new Date(tsCart.getTime() + randomInt(2, 10) * 60000)
+    const tsFulfillment = new Date(tsOrder.getTime() + (actualMinutes * 60000))
 
     const email = `fake+${Date.now()}_${i}@example.com`
     const password = config.fixedPassword
@@ -226,18 +247,11 @@ export default async function fakeOrders({ container }: ExecArgs) {
       )
 
       // Decide: cart-only (abandoned) or full flow
-      let isCartOnly = false
-      if (typeof abandoned !== "undefined") {
-        // abandonedIndices was precomputed — force abandon if current index is selected
-        isCartOnly = abandonedIndices ? abandonedIndices.has(i) : false
-      } else {
-        isCartOnly = Math.random() * 100 < cartOnlyRate
-      }
+      const isCartOnly = abandonedIndices.has(i)
 
       if (isCartOnly) {
-        const forced = typeof abandoned !== "undefined" && abandonedIndices?.has(i)
         console.log(
-          `[OK] #${i + 1} email=${email} cart=${cart.id} CART-ONLY (abandoned${forced ? ' FORCED' : ''})`
+          `[OK] #${i + 1} email=${email} cart=${cart.id} CART-ONLY (abandoned)`
         )
         success++
         continue
@@ -345,9 +359,6 @@ export default async function fakeOrders({ container }: ExecArgs) {
       })
 
       // 8. Track: fulfillment.delivered
-      const isOnTime = Math.random() * 100 < ontimeRate
-      const actualMinutes = isOnTime ? randomInt(8, 18) : randomInt(22, 35)
-
       await analytics.track(
         buildFulfillmentDelivered({
           customer_id: customerId,
@@ -375,7 +386,7 @@ export default async function fakeOrders({ container }: ExecArgs) {
   console.log(`\n=== Summary ===`)
   console.log(`success: ${success}`)
   console.log(`failed: ${failed}`)
-  console.log(`cart-only-rate target: ${cartOnlyRate}%`)
-  console.log(`ontime-rate target: ${ontimeRate}%`)
+  console.log(`abandoned target: ${abandonedCount}`)
+  console.log(`late target: ${lateCount}`)
   console.log(`expect-minutes: ${expectMinutes}`)
 }
