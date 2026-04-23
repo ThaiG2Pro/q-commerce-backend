@@ -19,9 +19,12 @@ export type FakeOrdersConfig = {
   paymentProviderId: string
   orderCount: number
   accountCount: number
+  backDay: number
   minItemsPerOrder: number
   maxItemsPerOrder: number
   delayMsBetweenOrders: number
+  tsStepMs?: number
+  tsJitterMs?: number
   shippingAddress: AddressConfig
   billingAddress: AddressConfig
 }
@@ -35,9 +38,12 @@ const config: FakeOrdersConfig = {
   paymentProviderId: "pp_cod_cod",
   orderCount: 10,
   accountCount: 10,
+  backDay: 0,
   minItemsPerOrder: 1,
   maxItemsPerOrder: 2,
   delayMsBetweenOrders: 0,
+  tsStepMs: 50,
+  tsJitterMs: 50,
   shippingAddress: {
     first_name: "Guest",
     last_name: "Buyer",
