@@ -77,6 +77,7 @@ export default async function fakeOrders({ container }: ExecArgs) {
   const backDay = intArg("back_day", 0)
   const spread = intArg("spread", 0)
   const trend = parseArg("trend") || "none"
+  const randomHour = parseArg("random-hour") !== undefined
   const backOffsetMs = Math.max(0, backDay) * 24 * 60 * 60 * 1000
 
   if (abandonedCount + lateCount > orderCount) {
@@ -99,7 +100,7 @@ export default async function fakeOrders({ container }: ExecArgs) {
 
   if (abandonedCount > 0) console.log(`Targeting ${abandonedCount} abandoned cart(s) at indices: ${[...abandonedIndices].join(",")}`)
   if (lateCount > 0) console.log(`Targeting ${lateCount} late delivery(ies) at indices: ${[...lateIndices].join(",")}`)
-  console.log(`Time window: back_day=${backDay}, spread=${spread}, trend=${trend}`)
+  console.log(`Time window: back_day=${backDay}, spread=${spread}, trend=${trend}, random_hour=${randomHour}`)
 
   // Load variants
   const variantsPath = path.resolve(__dirname, "variants.template.json")
@@ -154,7 +155,10 @@ export default async function fakeOrders({ container }: ExecArgs) {
     else if (trend === "down") weight = 1 - Math.pow(1 - progress, 2)
 
     // Jitter to make it look human
-    const baseJitterMs = randomInt(-10, 10) * 60000 
+    let baseJitterMs = randomInt(-10, 10) * 60000 
+    if (randomHour) {
+      baseJitterMs += randomInt(-12, 12) * 3600000 // +/- 12 hours
+    }
     const baseMs = anchorMs + (spreadMs * weight) + baseJitterMs
 
     // 2. Early delivery calculation for timestamp consistency
