@@ -155,11 +155,23 @@ export default async function fakeOrders({ container }: ExecArgs) {
     else if (trend === "down") weight = 1 - Math.pow(1 - progress, 2)
 
     // Jitter to make it look human
-    let baseJitterMs = randomInt(-10, 10) * 60000 
+    const targetDayMs = anchorMs + (spreadMs * weight)
+    let baseMs: number
+
     if (randomHour) {
-      baseJitterMs += randomInt(-12, 12) * 3600000 // +/- 12 hours
+      const d = new Date(targetDayMs)
+      // Pick a realistic hour between 7 AM and 11 PM (90% of cases) or any hour (10%)
+      const hour = Math.random() > 0.1 ? randomInt(7, 22) : randomInt(0, 23)
+      d.setHours(hour, randomInt(0, 59), randomInt(0, 59))
+      baseMs = d.getTime()
+    } else {
+      baseMs = targetDayMs + (randomInt(-10, 10) * 60000)
     }
-    const baseMs = anchorMs + (spreadMs * weight) + baseJitterMs
+
+    // Safety: Never let a fake order exist in the future
+    if (baseMs > nowMs) {
+      baseMs = nowMs - (randomInt(2, 10) * 60000) // 2-10 mins ago
+    }
 
     // 2. Early delivery calculation for timestamp consistency
     const isOnTime = !lateIndices.has(i)
