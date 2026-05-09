@@ -77,7 +77,7 @@ export default async function fakeOrders({ container }: ExecArgs) {
   const backDay = intArg("back_day", 0)
   const spread = intArg("spread", 0)
   const trend = parseArg("trend") || "none"
-  const randomHour = parseArg("random-hour") !== undefined
+  const randomHour = process.argv.some(arg => arg === "--random-hour")
   const backOffsetMs = Math.max(0, backDay) * 24 * 60 * 60 * 1000
 
   if (abandonedCount + lateCount > orderCount) {
