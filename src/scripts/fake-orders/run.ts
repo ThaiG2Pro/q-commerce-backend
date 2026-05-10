@@ -429,8 +429,8 @@ export default async function fakeOrders({ container }: ExecArgs) {
     if ((analytics as any).flush) {
       await (analytics as any).flush()
     }
-    // Extra safety wait for the last customer
-    await new Promise(r => setTimeout(r, 5000))
+    // Extra safety wait for the last customer - increased to 10s
+    await new Promise(r => setTimeout(r, 10000))
   } catch (e: any) {
     console.warn(`[WARN] Final flush failed: ${e.message}`)
   }
