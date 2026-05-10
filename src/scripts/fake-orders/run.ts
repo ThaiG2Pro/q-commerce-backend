@@ -211,15 +211,19 @@ export default async function fakeOrders({ container }: ExecArgs) {
       const token = loginData.token
 
       // Track: customer.created
-      await analytics.track(
-        buildCustomerCreated({
-          customer_id: customerId,
-          email,
-          source: "script",
-          is_simulated: true,
-          timestamp: tsCustomer,
-        }) as any
-      )
+      try {
+        await analytics.track(
+          buildCustomerCreated({
+            customer_id: customerId,
+            email,
+            source: "script",
+            is_simulated: true,
+            timestamp: tsCustomer,
+          }) as any
+        )
+      } catch (e: any) {
+        console.warn(`[WARN] Failed to track customer.created: ${e.message}`)
+      }
 
       // 2. Create cart (authenticated → cart gets customer_id)
       const cartData = await apiFetch(baseUrl, "/store/carts", {
@@ -250,17 +254,21 @@ export default async function fakeOrders({ container }: ExecArgs) {
       })
 
       // Track: cart.created
-      await analytics.track(
-        buildCartCreated({
-          customer_id: customerId,
-          email,
-          cart_id: cart.id,
-          currency_code: cart.currency_code,
-          source: "script",
-          is_simulated: true,
-          timestamp: tsCart,
-        }) as any
-      )
+      try {
+        await analytics.track(
+          buildCartCreated({
+            customer_id: customerId,
+            email,
+            cart_id: cart.id,
+            currency_code: cart.currency_code,
+            source: "script",
+            is_simulated: true,
+            timestamp: tsCart,
+          }) as any
+        )
+      } catch (e: any) {
+        console.warn(`[WARN] Failed to track cart.created: ${e.message}`)
+      }
 
       // Decide: cart-only (abandoned) or full flow
       const isCartOnly = abandonedIndices.has(i)
@@ -270,6 +278,8 @@ export default async function fakeOrders({ container }: ExecArgs) {
           `[OK] #${i + 1} email=${email} cart=${cart.id} CART-ONLY (abandoned)`
         )
         success++
+        // Small sleep even for abandoned
+        await new Promise(r => setTimeout(r, 500))
         continue
       }
 
@@ -314,20 +324,24 @@ export default async function fakeOrders({ container }: ExecArgs) {
       if (!order?.id) throw new Error("Failed to complete cart")
 
       // Track: order.placed
-      await analytics.track(
-        buildOrderPlaced({
-          customer_id: customerId,
-          email,
-          order_id: order.id,
-          cart_id: cart.id,
-          total: order.total,
-          currency_code: order.currency_code,
-          items_count: order.items?.length,
-          source: "script",
-          is_simulated: true,
-          timestamp: tsOrder,
-        }) as any
-      )
+      try {
+        await analytics.track(
+          buildOrderPlaced({
+            customer_id: customerId,
+            email,
+            order_id: order.id,
+            cart_id: cart.id,
+            total: order.total,
+            currency_code: order.currency_code,
+            items_count: order.items?.length,
+            source: "script",
+            is_simulated: true,
+            timestamp: tsOrder,
+          }) as any
+        )
+      } catch (e: any) {
+        console.warn(`[WARN] Failed to track order.placed: ${e.message}`)
+      }
 
       // 6. Admin: create fulfillment — use items from complete response
       const fulfillmentItems = (order.items || []).map((item: any) => ({
@@ -374,29 +388,49 @@ export default async function fakeOrders({ container }: ExecArgs) {
         body: {},
       })
 
-      // 8. Track: fulfillment.delivered
-      await analytics.track(
-        buildFulfillmentDelivered({
-          customer_id: customerId,
-          email,
-          order_id: order.id,
-          fulfillment_id: fulfillment.id,
-          expected_delivery_minutes: expectMinutes,
-          actual_delivery_minutes: actualMinutes,
-          source: "script",
-          is_simulated: true,
-          timestamp: tsFulfillment,
-        }) as any
-      )
+      // Track: fulfillment.delivered
+      try {
+        await analytics.track(
+          buildFulfillmentDelivered({
+            customer_id: customerId,
+            email,
+            order_id: order.id,
+            fulfillment_id: fulfillment.id,
+            expected_delivery_minutes: expectMinutes,
+            actual_delivery_minutes: actualMinutes,
+            source: "script",
+            is_simulated: true,
+            timestamp: tsFulfillment,
+          }) as any
+        )
+        // Explicitly flush if the service supports it (standard in many Node SDKs)
+        if ((analytics as any).flush) {
+          await (analytics as any).flush()
+        }
+      } catch (e: any) {
+        console.warn(`[WARN] Failed to track fulfillment.delivered: ${e.message}`)
+      }
 
       console.log(
         `[OK] #${i + 1} email=${email} order=${order.id} delivery=${actualMinutes}min ${isOnTime ? "ON-TIME" : "LATE"}`
       )
       success++
+
+      // Sleep to prevent PostHog rate limiting/timeouts - increased to 3s
+      await new Promise(r => setTimeout(r, 3000))
     } catch (err: any) {
       failed++
       console.log(`[FAIL] #${i + 1} email=${email} error=${err.message}`)
     }
+  }
+
+  // Final flush to ensure no data is left in the buffer before exiting
+  try {
+    if ((analytics as any).flush) {
+      await (analytics as any).flush()
+    }
+  } catch (e: any) {
+    console.warn(`[WARN] Final flush failed: ${e.message}`)
   }
 
   console.log(`\n=== Summary ===`)
